@@ -1,3 +1,6 @@
+<img src="https://github.com/mnindrazaka.png" alt="M Nindra Zaka" width="180"
+     style="border-radius: 100%; display: block; margin: 0 auto;" />
+
 # Hi, I’m Aka 👋
 I’m a software engineer who loves building real-world systems.
 
