@@ -5,7 +5,6 @@ process.env.TAMAGUI_TARGET = "web";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "export",
-  basePath: "/mnindrazaka.com",
   trailingSlash: true,
   images: {
     unoptimized: true,
