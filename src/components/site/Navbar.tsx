@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Moon, Sun, Menu, X } from "@tamagui/lucide-icons";
 import { useThemeSetting } from "@tamagui/next-theme";
 import { Anchor, Button, Sheet, Text, XStack, YStack } from "tamagui";
+import { useThemeTokens } from "@/theme/useThemeTokens";
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
@@ -15,19 +16,7 @@ const NAV_LINKS = [
 export function Navbar() {
   const themeSetting = useThemeSetting();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const isDark = mounted && themeSetting.current === "dark";
-  const bg = isDark ? "#15110E" : "#FAF7F2";
-  const text = isDark ? "#F5EFE4" : "#1A1613";
-  const textMuted = isDark
-    ? "rgba(245,239,228,0.6)"
-    : "rgba(26,22,19,0.6)";
-  const border = isDark ? "#2A2420" : "#E8E0D5";
+  const { bg, text, textMuted, border, isDark, mounted } = useThemeTokens();
 
   return (
     <>
@@ -82,11 +71,7 @@ export function Navbar() {
         </XStack>
 
         {/* Mobile controls */}
-        <XStack
-          gap="$2"
-          alignItems="center"
-          $gtMd={{ display: "none" }}
-        >
+        <XStack gap="$2" alignItems="center" $gtMd={{ display: "none" }}>
           <Button
             width={36}
             height={36}
