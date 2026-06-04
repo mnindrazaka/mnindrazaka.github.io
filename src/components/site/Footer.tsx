@@ -1,6 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Github, Linkedin, Mail, Twitter } from "@tamagui/lucide-icons";
 import { Anchor, Text, XStack, YStack } from "tamagui";
+import { footerColors } from "@/theme/tokens";
+import { fonts } from "@/theme/tokens";
+
+const { bg: BG, text: TEXT, textMuted: TEXT_MUTED, border: BORDER, accent: ACCENT } = footerColors;
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
@@ -11,13 +15,7 @@ const NAV_LINKS = [
   { label: "Contact", href: "/contact" },
 ];
 
-const TOPICS = [
-  "Product",
-  "Engineering",
-  "Leadership",
-  "Business",
-  "Career",
-];
+const TOPICS = ["Product", "Engineering", "Leadership", "Business", "Career"];
 
 const SOCIAL = [
   {
@@ -42,32 +40,16 @@ const SOCIAL = [
   },
 ];
 
-const BG = "#1A1613";
-const TEXT = "#F5EFE4";
-const TEXT_MUTED = "rgba(245,239,228,0.5)";
-const BORDER = "rgba(245,239,228,0.08)";
-const ACCENT = "#B8893A";
-
 export function Footer() {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   return (
-    <YStack
-      backgroundColor={BG}
-      paddingTop="$12"
-      paddingBottom="$6"
-      alignItems="center"
-    >
+    <YStack backgroundColor={BG} paddingTop="$12" paddingBottom="$6" alignItems="center">
       <YStack width="100%" maxWidth={1200} paddingHorizontal="$6">
         {/* 4-column grid */}
         <XStack flexWrap="wrap" gap="$8" marginBottom="$10">
           {/* Brand */}
           <YStack flex={2} minWidth={200} gap="$4">
             <Text
-              style={{ fontFamily: "'Fraunces', serif" }}
+              style={{ fontFamily: fonts.display }}
               color={TEXT}
               fontSize={20}
               fontWeight="700"
@@ -79,7 +61,7 @@ export function Footer() {
               impact.
             </Text>
             <XStack gap="$4" marginTop="$1">
-              {SOCIAL.slice(0, 3).map(({ icon: Icon, href, label }) => (
+              {SOCIAL.slice(0, 3).map(({ icon: Icon, href }) => (
                 <Anchor
                   key={href}
                   href={href}
@@ -110,11 +92,7 @@ export function Footer() {
               Navigation
             </Text>
             {NAV_LINKS.map((link) => (
-              <Anchor
-                key={link.href}
-                href={link.href}
-                textDecorationLine="none"
-              >
+              <Anchor key={link.href} href={link.href} textDecorationLine="none">
                 <Text
                   color={TEXT_MUTED}
                   fontSize={14}
@@ -139,11 +117,7 @@ export function Footer() {
               Topics
             </Text>
             {TOPICS.map((topic) => (
-              <Anchor
-                key={topic}
-                href="/writing"
-                textDecorationLine="none"
-              >
+              <Anchor key={topic} href="/writing" textDecorationLine="none">
                 <Text
                   color={TEXT_MUTED}
                   fontSize={14}
@@ -191,7 +165,7 @@ export function Footer() {
           </YStack>
         </XStack>
 
-        {/* Copyright */}
+        {/* Copyright row */}
         <XStack
           borderTopWidth={1}
           borderTopColor={BORDER}

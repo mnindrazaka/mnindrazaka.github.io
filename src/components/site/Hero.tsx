@@ -1,30 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { useThemeSetting } from "@tamagui/next-theme";
+import React from "react";
 import { Anchor, Button, Text, XStack, YStack } from "tamagui";
 import NextImage from "next/image";
+import { useThemeTokens } from "@/theme/useThemeTokens";
+import { Chip } from "@/components/Chip";
+import { fonts } from "@/theme/tokens";
+import { layout } from "@/theme/tokens";
 
 export function Hero() {
-  const themeSetting = useThemeSetting();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const isDark = mounted && themeSetting.current === "dark";
-  const bg = isDark ? "#15110E" : "#FAF7F2";
-  const text = isDark ? "#F5EFE4" : "#1A1613";
-  const textMuted = isDark
-    ? "rgba(245,239,228,0.6)"
-    : "rgba(26,22,19,0.6)";
-  const imageBorder = isDark ? "#2A2420" : "#E8E0D5";
+  const { bg, text, textMuted, border, accent } = useThemeTokens();
 
   return (
     <YStack backgroundColor={bg} paddingVertical="$10" alignItems="center">
       <XStack
         width="100%"
-        maxWidth={1200}
-        paddingHorizontal="$6"
+        maxWidth={layout.maxWidth}
+        paddingHorizontal={layout.containerPadding}
         gap="$12"
         alignItems="center"
         flexDirection="column"
@@ -32,29 +22,11 @@ export function Hero() {
       >
         {/* Left: text content */}
         <YStack flex={1} gap="$5">
-          {/* Kicker chip */}
-          <XStack
-            alignSelf="flex-start"
-            backgroundColor={isDark ? "rgba(184,137,58,0.15)" : "rgba(184,137,58,0.1)"}
-            borderWidth={1}
-            borderColor="rgba(184,137,58,0.35)"
-            paddingHorizontal={14}
-            paddingVertical={5}
-            borderRadius={100}
-          >
-            <Text
-              color="#B8893A"
-              fontSize={11}
-              fontWeight="700"
-              letterSpacing={1.8}
-            >
-              FOUNDING ENGINEER
-            </Text>
-          </XStack>
+          <Chip label="FOUNDING ENGINEER" variant="accent" />
 
           {/* Headline with italic accent */}
           <Text
-            style={{ fontFamily: "'Fraunces', serif" }}
+            style={{ fontFamily: fonts.display }}
             fontSize={50}
             lineHeight={60}
             fontWeight="800"
@@ -64,22 +36,17 @@ export function Hero() {
           >
             Building products, businesses, and communities{" "}
             <Text
-              style={{ fontFamily: "'Fraunces', serif" }}
+              style={{ fontFamily: fonts.display }}
               fontStyle="italic"
-              color="#B8893A"
+              color={accent}
             >
               that
-            </Text>
-            {" "}create real impact.
+            </Text>{" "}
+            create real impact.
           </Text>
 
           {/* Body */}
-          <Text
-            color={textMuted}
-            fontSize={16}
-            lineHeight={27}
-            maxWidth={540}
-          >
+          <Text color={textMuted} fontSize={16} lineHeight={27} maxWidth={540}>
             I&apos;m a software engineer and founder. I built a real business
             (Gatherloop), created a custom POS system for it from scratch, and
             ship end-to-end solutions that real teams rely on daily. I code,
@@ -105,7 +72,7 @@ export function Hero() {
             </Anchor>
             <Anchor href="#what-ive-built" textDecorationLine="none">
               <Button
-                backgroundColor="#B8893A"
+                backgroundColor={accent}
                 borderWidth={0}
                 color="white"
                 paddingHorizontal={22}
@@ -134,7 +101,7 @@ export function Hero() {
           borderRadius={20}
           overflow="hidden"
           borderWidth={1}
-          borderColor={imageBorder}
+          borderColor={border}
         >
           <NextImage
             src="/images/profile.jpg"
