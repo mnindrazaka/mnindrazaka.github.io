@@ -7,3 +7,4 @@ export * from "./Section";
 export * from "./SectionHeader";
 export * from "./Chip";
 export * from "./IconStat";
+export * from "./ProjectCard";

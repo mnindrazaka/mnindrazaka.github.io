@@ -76,5 +76,5 @@ export const layout = {
   containerPadding: "$6",
 } as const;
 
-export type ThemeColors = typeof lightColors;
-export type FooterColors = typeof footerColors;
+export type ThemeColors = { [K in keyof typeof lightColors]: string };
+export type FooterColors = { [K in keyof typeof footerColors]: string };
