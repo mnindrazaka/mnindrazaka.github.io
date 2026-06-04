@@ -8,7 +8,7 @@
 
 The visual target for every phase below is the mockup at:
 
-![Redesign reference mockup](./mockup/home-reference.png)
+![Redesign reference mockup](./home-reference.png)
 
 It shows, top-to-bottom and left-to-right:
 
