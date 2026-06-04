@@ -9,6 +9,7 @@ import { Footer } from "@/components/site/Footer";
 import { Section } from "@/components/Section";
 import { SectionHeader } from "@/components/SectionHeader";
 import { IconStat } from "@/components/IconStat";
+import { ProjectCard } from "@/components/ProjectCard";
 import { useThemeTokens } from "@/theme/useThemeTokens";
 import {
   Target,
@@ -22,18 +23,13 @@ export type HomeScreenProps = {
   posts: Post[];
 };
 
-const Portfolio = dynamic(
-  () => import("tamakit").then((mod) => mod.Portfolio),
-  { ssr: false }
-);
-
 const Blog = dynamic(() => import("tamakit").then((mod) => mod.Blog), {
   ssr: false,
 });
 
 export function HomeScreen(props: HomeScreenProps) {
   const router = useRouter();
-  const { bg, accent } = useThemeTokens();
+  const { bg, surface, accent } = useThemeTokens();
 
   const whyHireStats = [
     {
@@ -99,33 +95,49 @@ export function HomeScreen(props: HomeScreenProps) {
         </XStack>
       </Section>
 
-      {/* Legacy sections — to be replaced in later phases */}
-      <YStack marginVertical="$10" gap="$10" paddingHorizontal="$4">
-        <YStack id="portfolio">
-          <Portfolio
-            title="Portfolio"
-            subtitle="Explore my collection of projects that showcase my expertise in web development."
-            items={[
-              {
-                title: "Point Of Sale",
-                content:
-                  "A custom Point of Sale (POS) system tailored for a coffee shop, supporting both web and mobile platforms, handles essential functions such as registering new menu items and recording customer transactions. It automates cost and profit calculations, streamlining financial management by allocating budgets for operational expenses, food costs, and profits, delivering a comprehensive and efficient solution for business operations.",
-                imageSource: "/images/point-of-sale.png",
-                onPress: () =>
-                  router.push("https://github.com/gatherloop/gatherloop-pos"),
-              },
-              {
-                title: "Tamakit",
-                content:
-                  "Tamakit, a UI kit powered by React Native Web and built with Tamagui, streamlines universal development for web and mobile by providing reusable, high-performance components from a single codebase. With a focus on consistency and scalability, it enables developers to efficiently build seamless, cross-platform applications while maintaining a unified codebase.",
-                imageSource: "/images/tamakit.png",
-                onPress: () =>
-                  router.push("https://github.com/mnindrazaka/tamakit"),
-              },
+      {/* What I've Built */}
+      <Section id="what-ive-built" backgroundColor={surface}>
+        <SectionHeader kicker="WHAT I'VE BUILT" title="What I've Built" />
+        <XStack flexWrap="wrap" gap="$5">
+          <ProjectCard
+            category="Business"
+            categoryVariant="business"
+            title="Building Gatherloop"
+            subtitle="Turning a personal vision into a thriving community café and event space."
+            description="Gatherloop started as a dream to create a space where people could gather, connect, and grow. I built and ran the business end-to-end — from operations and finance to marketing and community building."
+            imageSource="/images/hero.png"
+            imageAlt="Gatherloop café"
+            stats={[
+              { value: "Since 2022", label: "Founded" },
+              { value: "1,000+", label: "Members" },
+              { value: "50+", label: "Events" },
+              { value: "∞", label: "Memories" },
             ]}
+            ctaLabel="Read the story"
+            ctaHref="/business"
           />
-        </YStack>
+          <ProjectCard
+            category="Product"
+            categoryVariant="product"
+            title="Custom POS System"
+            subtitle="Built for my own business — because no off-the-shelf tool did the job."
+            description="I designed and built a full-featured Point of Sale system from scratch to run Gatherloop's daily operations. Sales, inventory, expenses, financial reports — all in one product, built in-house."
+            imageSource="/images/point-of-sale.png"
+            imageAlt="POS System mockup"
+            stats={[
+              { value: "1", label: "Product" },
+              { value: "Daily", label: "In Use" },
+              { value: "100%", label: "Built In-House" },
+              { value: "Always", label: "Improving" },
+            ]}
+            ctaLabel="Explore the case study"
+            ctaHref="/pos-system"
+          />
+        </XStack>
+      </Section>
 
+      {/* Legacy blog section — to be replaced in Phase 4 */}
+      <YStack marginVertical="$10" gap="$10" paddingHorizontal="$4">
         <YStack id="blog">
           <Blog
             title="Blog Posts"
