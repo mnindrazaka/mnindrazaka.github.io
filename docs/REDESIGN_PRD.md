@@ -4,6 +4,23 @@
 
 ---
 
+## 0. Reference mockup
+
+The visual target for every phase below is the mockup at:
+
+![Redesign reference mockup](./mockup/home-reference.png)
+
+It shows, top-to-bottom and left-to-right:
+
+- **Home page** (full column on the left) — navbar, hero with portrait, "Why founders hire me" 5-up, "What I've Built" 2 cards, "Latest Writing" 4-up, CTA banner, footer.
+- **Business / Gatherloop page** (top right) — hero with café photo, "What I learned" 5-up icon stats, pull quote, timeline.
+- **POS System case study page** (middle right) — hero with product mockup, Problem/Solution two-column, Tech Stack icon row, 4 impact stats, Key Takeaways checklist.
+- **Writing index page** (bottom right) — hero, category filter tabs, stacked post list.
+
+When a phase below says "matches mockup," this is the file to compare against. The name shown on the mockup is "Rifky Pratama" but we use **M. Nindra Zaka** everywhere — the mockup is layout/style reference only.
+
+---
+
 ## 1. Background & Goals
 
 ### 1.1 Current state
