@@ -8,6 +8,7 @@ export type Post = {
   href: string;
   imageUrl: string;
   date: string;
+  category?: string;
 };
 
 export type BlogCardProps = Post & YStackProps;

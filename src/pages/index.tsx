@@ -24,6 +24,7 @@ export const getStaticProps: GetStaticProps<HomeScreenProps> = async () => {
         month: "long",
         day: "numeric",
       }),
+      category: meta.data.category ?? "Engineering",
     });
   }
 
