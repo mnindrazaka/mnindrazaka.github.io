@@ -10,3 +10,4 @@ export * from "./IconStat";
 export * from "./ProjectCard";
 export * from "./PostCard";
 export * from "./CTABanner";
+export * from "./Timeline";
