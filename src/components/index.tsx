@@ -11,3 +11,4 @@ export * from "./ProjectCard";
 export * from "./PostCard";
 export * from "./CTABanner";
 export * from "./Timeline";
+export * from "./Checklist";

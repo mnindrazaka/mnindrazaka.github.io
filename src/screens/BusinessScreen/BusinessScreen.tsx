@@ -220,9 +220,9 @@ export function BusinessScreen() {
             maxWidth={700}
             $sm={{ fontSize: 20, lineHeight: 32 }}
           >
-            "Running a business changed the way I build software. Every feature
-            I ship now has a reason — a real user, a real problem, a real
-            outcome."
+            &ldquo;Running a business changed the way I build software. Every
+            feature I ship now has a reason — a real user, a real problem, a
+            real outcome.&rdquo;
           </Text>
           <Text
             fontSize={13}
