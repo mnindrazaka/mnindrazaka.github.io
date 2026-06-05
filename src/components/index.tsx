@@ -8,3 +8,5 @@ export * from "./SectionHeader";
 export * from "./Chip";
 export * from "./IconStat";
 export * from "./ProjectCard";
+export * from "./PostCard";
+export * from "./CTABanner";

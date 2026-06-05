@@ -1,8 +1,6 @@
 import React from "react";
 import { Post } from "@/components";
-import dynamic from "next/dynamic";
 import { XStack, YStack } from "tamagui";
-import { useRouter } from "next/router";
 import { Navbar } from "@/components/site/Navbar";
 import { Hero } from "@/components/site/Hero";
 import { Footer } from "@/components/site/Footer";
@@ -10,6 +8,8 @@ import { Section } from "@/components/Section";
 import { SectionHeader } from "@/components/SectionHeader";
 import { IconStat } from "@/components/IconStat";
 import { ProjectCard } from "@/components/ProjectCard";
+import { PostCard } from "@/components/PostCard";
+import { CTABanner } from "@/components/CTABanner";
 import { useThemeTokens } from "@/theme/useThemeTokens";
 import {
   Target,
@@ -23,12 +23,7 @@ export type HomeScreenProps = {
   posts: Post[];
 };
 
-const Blog = dynamic(() => import("tamakit").then((mod) => mod.Blog), {
-  ssr: false,
-});
-
 export function HomeScreen(props: HomeScreenProps) {
-  const router = useRouter();
   const { bg, surface, accent } = useThemeTokens();
 
   const whyHireStats = [
@@ -136,29 +131,30 @@ export function HomeScreen(props: HomeScreenProps) {
         </XStack>
       </Section>
 
-      {/* Legacy blog section — to be replaced in Phase 4 */}
-      <YStack marginVertical="$10" gap="$10" paddingHorizontal="$4">
-        <YStack id="blog">
-          <Blog
-            title="Blog Posts"
-            subtitle="Explore My Technical Blog for Insightful Reads"
-            items={props.posts.map(
-              ({ title, date, description, href, imageUrl }) => ({
-                title,
-                content: description,
-                imageSource: imageUrl,
-                categoryName: "Software Development",
-                author: {
-                  name: "M. Nindra Zaka",
-                  imageSource: "/images/profile.jpg",
-                },
-                publishedAt: date,
-                onPress: () => router.push(href),
-              })
-            )}
-          />
-        </YStack>
-      </YStack>
+      {/* Latest Writing */}
+      <Section backgroundColor={bg}>
+        <SectionHeader
+          kicker="LATEST WRITING"
+          title="Latest Writing"
+          viewAllHref="/writing"
+          viewAllLabel="View all articles →"
+        />
+        <XStack flexWrap="wrap" gap="$4" rowGap="$5">
+          {props.posts.slice(0, 4).map((post) => (
+            <YStack
+              key={post.href}
+              flexBasis="100%"
+              $gtXs={{ flexBasis: "48%" }}
+              $gtMd={{ flex: 1, flexBasis: 0 }}
+            >
+              <PostCard {...post} />
+            </YStack>
+          ))}
+        </XStack>
+      </Section>
+
+      {/* CTA Banner */}
+      <CTABanner />
 
       <Footer />
     </YStack>
