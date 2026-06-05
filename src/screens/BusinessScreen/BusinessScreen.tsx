@@ -1,4 +1,5 @@
 import React from "react";
+import Head from "next/head";
 import Link from "next/link";
 import NextImage from "next/image";
 import { Text, XStack, YStack } from "tamagui";
@@ -78,7 +79,30 @@ export function BusinessScreen() {
   ];
 
   return (
-    <YStack>
+    <>
+      <Head>
+        <title>Building Gatherloop — M. Nindra Zaka</title>
+        <meta
+          name="description"
+          content="How I built and ran Gatherloop — a community café and event space — from the ground up. Lessons in operations, finance, marketing, and leadership."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Building Gatherloop — M. Nindra Zaka" />
+        <meta
+          property="og:description"
+          content="How I built and ran Gatherloop — a community café and event space — from the ground up. Lessons in operations, finance, marketing, and leadership."
+        />
+        <meta property="og:image" content="/og/business.svg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:creator" content="@mnindrazaka" />
+        <meta name="twitter:title" content="Building Gatherloop — M. Nindra Zaka" />
+        <meta
+          name="twitter:description"
+          content="How I built and ran Gatherloop — a community café and event space — from the ground up."
+        />
+        <meta name="twitter:image" content="/og/business.svg" />
+      </Head>
+      <YStack>
       <Navbar />
 
       {/* Hero */}
@@ -249,5 +273,6 @@ export function BusinessScreen() {
 
       <Footer />
     </YStack>
+    </>
   );
 }

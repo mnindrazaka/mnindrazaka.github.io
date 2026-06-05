@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#FAF7F2"/>
+  <rect x="0" y="0" width="8" height="630" fill="#B8893A"/>
+  <text x="80" y="190" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" letter-spacing="3" fill="#B8893A">BUSINESS</text>
+  <text x="80" y="270" font-family="Georgia, 'Times New Roman', serif" font-size="58" font-weight="700" fill="#1A1613">Building</text>
+  <text x="80" y="345" font-family="Georgia, 'Times New Roman', serif" font-size="58" font-weight="700" fill="#1A1613">Gatherloop</text>
+  <text x="80" y="430" font-family="Arial, Helvetica, sans-serif" font-size="24" fill="#6B5E52">From a personal vision to a community café and event space.</text>
+  <rect x="0" y="550" width="1200" height="80" fill="#1A1613"/>
+  <text x="80" y="600" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="700" fill="#FAF7F2">M. Nindra Zaka</text>
+  <text x="80" y="622" font-family="Arial, Helvetica, sans-serif" font-size="17" fill="#B8893A">mnindrazaka.github.io</text>
+</svg>

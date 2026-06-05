@@ -1,4 +1,5 @@
 import React from "react";
+import Head from "next/head";
 import Link from "next/link";
 import { Text, XStack, YStack, Anchor } from "tamagui";
 import {
@@ -52,7 +53,30 @@ export function ContactScreen() {
   const { bg, surface, border, text, textMuted, accent } = useThemeTokens();
 
   return (
-    <YStack>
+    <>
+      <Head>
+        <title>Contact — M. Nindra Zaka</title>
+        <meta
+          name="description"
+          content="Let's talk. I'm open to Founding Engineer roles at early-stage US/EU startups and always happy to chat about products and engineering."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Contact — M. Nindra Zaka" />
+        <meta
+          property="og:description"
+          content="Let's talk. I'm open to Founding Engineer roles at early-stage US/EU startups and always happy to chat about products and engineering."
+        />
+        <meta property="og:image" content="/og/home.svg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:creator" content="@mnindrazaka" />
+        <meta name="twitter:title" content="Contact — M. Nindra Zaka" />
+        <meta
+          name="twitter:description"
+          content="Let's talk. I'm open to Founding Engineer roles at early-stage US/EU startups."
+        />
+        <meta name="twitter:image" content="/og/home.svg" />
+      </Head>
+      <YStack>
       <Navbar />
 
       {/* Page header */}
@@ -307,5 +331,6 @@ export function ContactScreen() {
 
       <Footer />
     </YStack>
+    </>
   );
 }

@@ -36,7 +36,6 @@
     "react-syntax-highlighter": "^15.5.0",
     "remark-gfm": "^3.0.1",
     "tamagui": "^1.117.1",
-    "tamakit": "^0.0.27",
     "typescript": "5.0.4",
     "webpack": "^5.96.1"
   }

@@ -1,4 +1,5 @@
 import React from "react";
+import Head from "next/head";
 import Link from "next/link";
 import NextImage from "next/image";
 import { Text, XStack, YStack, Anchor } from "tamagui";
@@ -49,7 +50,30 @@ export function AboutScreen() {
   const { bg, surface, border, text, textMuted, accent } = useThemeTokens();
 
   return (
-    <YStack>
+    <>
+      <Head>
+        <title>About — M. Nindra Zaka</title>
+        <meta
+          name="description"
+          content="Software engineer, founder of Gatherloop, and Founding Engineer. I build products that create real business outcomes."
+        />
+        <meta property="og:type" content="profile" />
+        <meta property="og:title" content="About — M. Nindra Zaka" />
+        <meta
+          property="og:description"
+          content="Software engineer, founder of Gatherloop, and Founding Engineer. I build products that create real business outcomes."
+        />
+        <meta property="og:image" content="/og/home.svg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:creator" content="@mnindrazaka" />
+        <meta name="twitter:title" content="About — M. Nindra Zaka" />
+        <meta
+          name="twitter:description"
+          content="Software engineer, founder of Gatherloop, and Founding Engineer."
+        />
+        <meta name="twitter:image" content="/og/home.svg" />
+      </Head>
+      <YStack>
       <Navbar />
 
       {/* Hero — two-column */}
@@ -291,5 +315,6 @@ export function AboutScreen() {
 
       <Footer />
     </YStack>
+    </>
   );
 }
