@@ -31,6 +31,7 @@ export const getStaticProps: GetStaticProps<
       image: meta.data.image,
       title: meta.data.title,
       description: meta.data.description,
+      category: meta.data.category ?? null,
       date: new Date(meta.data.date).toLocaleDateString(undefined, {
         weekday: "long",
         year: "numeric",

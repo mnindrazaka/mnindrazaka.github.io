@@ -31,7 +31,7 @@ module.exports = function (name, { defaultConfig }) {
 
   const tamaguiPlugin = withTamagui({
     config: "./tamagui.config.ts",
-    components: ["tamagui", "tamakit"],
+    components: ["tamagui"],
     disableExtraction: process.env.NODE_ENV === "development",
   });
 
