@@ -1,4 +1,5 @@
 import React from "react";
+import Head from "next/head";
 import { Post } from "@/components";
 import { XStack, YStack } from "tamagui";
 import { Navbar } from "@/components/site/Navbar";
@@ -60,7 +61,30 @@ export function HomeScreen(props: HomeScreenProps) {
   ];
 
   return (
-    <YStack>
+    <>
+      <Head>
+        <title>M. Nindra Zaka — Software Engineer &amp; Founder</title>
+        <meta
+          name="description"
+          content="Building products, businesses, and communities that create real impact. Founding Engineer open to remote opportunities at US/EU startups."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="M. Nindra Zaka — Software Engineer & Founder" />
+        <meta
+          property="og:description"
+          content="Building products, businesses, and communities that create real impact. Founding Engineer open to remote opportunities at US/EU startups."
+        />
+        <meta property="og:image" content="/og/home.svg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:creator" content="@mnindrazaka" />
+        <meta name="twitter:title" content="M. Nindra Zaka — Software Engineer & Founder" />
+        <meta
+          name="twitter:description"
+          content="Building products, businesses, and communities that create real impact."
+        />
+        <meta name="twitter:image" content="/og/home.svg" />
+      </Head>
+      <YStack>
       <Navbar />
 
       <Hero />
@@ -158,5 +182,6 @@ export function HomeScreen(props: HomeScreenProps) {
 
       <Footer />
     </YStack>
+    </>
   );
 }

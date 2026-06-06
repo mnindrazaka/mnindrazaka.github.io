@@ -3,10 +3,9 @@ import { NextThemeProvider, useRootTheme } from "@tamagui/next-theme";
 import { AppProps } from "next/app";
 import Head from "next/head";
 import React, { useMemo } from "react";
-import { TamaguiProvider, Theme } from "tamagui";
+import { TamaguiProvider } from "tamagui";
 
 import config from "../../tamagui.config";
-import { AccentProvider } from "@/components/AccentContext";
 
 export default function App({ Component, pageProps }: AppProps) {
   const [theme, setTheme] = useRootTheme();
@@ -19,6 +18,9 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <Head>
         <title>M. Nindra Zaka</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="author" content="M. Nindra Zaka" />
+        <meta name="robots" content="index, follow" />
       </Head>
       <NextThemeProvider
         onChangeTheme={(theme) => {
@@ -31,7 +33,7 @@ export default function App({ Component, pageProps }: AppProps) {
           disableRootThemeClass
           defaultTheme={theme}
         >
-          <AccentProvider>{contents}</AccentProvider>
+          {contents}
         </TamaguiProvider>
       </NextThemeProvider>
     </>

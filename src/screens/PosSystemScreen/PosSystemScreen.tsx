@@ -1,4 +1,5 @@
 import React from "react";
+import Head from "next/head";
 import Link from "next/link";
 import NextImage from "next/image";
 import { Text, XStack, YStack } from "tamagui";
@@ -70,7 +71,30 @@ export function PosSystemScreen() {
   const { bg, surface, border, text, textMuted, accent } = useThemeTokens();
 
   return (
-    <YStack>
+    <>
+      <Head>
+        <title>Custom POS System Case Study — M. Nindra Zaka</title>
+        <meta
+          name="description"
+          content="I built a fully custom POS system for Gatherloop when off-the-shelf tools couldn't keep up. Full-stack, cross-platform, running in production daily."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Custom POS System Case Study — M. Nindra Zaka" />
+        <meta
+          property="og:description"
+          content="I built a fully custom POS system for Gatherloop when off-the-shelf tools couldn't keep up. Full-stack, cross-platform, running in production daily."
+        />
+        <meta property="og:image" content="/og/pos-system.svg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:creator" content="@mnindrazaka" />
+        <meta name="twitter:title" content="Custom POS System Case Study — M. Nindra Zaka" />
+        <meta
+          name="twitter:description"
+          content="I built a fully custom POS system for Gatherloop when off-the-shelf tools couldn't keep up."
+        />
+        <meta name="twitter:image" content="/og/pos-system.svg" />
+      </Head>
+      <YStack>
       <Navbar />
 
       {/* Hero */}
@@ -411,5 +435,6 @@ export function PosSystemScreen() {
 
       <Footer />
     </YStack>
+    </>
   );
 }

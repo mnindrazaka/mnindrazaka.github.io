@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Head from "next/head";
 import Link from "next/link";
 import { Image, Text, XStack, YStack } from "tamagui";
 import { Navbar } from "@/components/site/Navbar";
@@ -114,7 +115,30 @@ export function WritingScreen({ posts }: WritingScreenProps) {
       : posts.filter((p) => (p.category ?? "Engineering") === activeCategory);
 
   return (
-    <YStack>
+    <>
+      <Head>
+        <title>Writing — M. Nindra Zaka</title>
+        <meta
+          name="description"
+          content="Thoughts on engineering, product, business, and life from a software engineer who has run a real business."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Writing — M. Nindra Zaka" />
+        <meta
+          property="og:description"
+          content="Thoughts on engineering, product, business, and life from a software engineer who has run a real business."
+        />
+        <meta property="og:image" content="/og/writing.svg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:creator" content="@mnindrazaka" />
+        <meta name="twitter:title" content="Writing — M. Nindra Zaka" />
+        <meta
+          name="twitter:description"
+          content="Thoughts on engineering, product, business, and life."
+        />
+        <meta name="twitter:image" content="/og/writing.svg" />
+      </Head>
+      <YStack>
       <Navbar />
 
       {/* Hero */}
@@ -226,5 +250,6 @@ export function WritingScreen({ posts }: WritingScreenProps) {
 
       <Footer />
     </YStack>
+    </>
   );
 }

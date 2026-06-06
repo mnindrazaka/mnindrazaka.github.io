@@ -21,6 +21,8 @@ export function Navbar() {
   return (
     <>
       <XStack
+        tag="nav"
+        aria-label="Main navigation"
         style={{ position: "sticky", top: 0, zIndex: 1000 }}
         backgroundColor={bg}
         borderBottomWidth={1}
@@ -64,6 +66,7 @@ export function Navbar() {
             borderWidth={1}
             borderColor={border}
             color={text}
+            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
             onPress={() => themeSetting.set(isDark ? "light" : "dark")}
             icon={isDark ? <Sun size={16} /> : <Moon size={16} />}
             pressStyle={{ opacity: 0.7, scale: 0.95 }}
@@ -80,6 +83,7 @@ export function Navbar() {
             borderWidth={1}
             borderColor={border}
             color={text}
+            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
             onPress={() => themeSetting.set(isDark ? "light" : "dark")}
             icon={isDark ? <Sun size={16} /> : <Moon size={16} />}
             pressStyle={{ opacity: 0.7, scale: 0.95 }}
@@ -92,6 +96,7 @@ export function Navbar() {
             borderWidth={1}
             borderColor={border}
             color={text}
+            aria-label="Open navigation menu"
             onPress={() => setMobileOpen(true)}
             icon={<Menu size={18} />}
             pressStyle={{ opacity: 0.7, scale: 0.95 }}

@@ -14,6 +14,8 @@ export type PostCardProps = {
   category?: string;
 };
 
+export type Post = PostCardProps;
+
 const categoryVariantMap: Record<string, ChipVariant> = {
   Product: "product",
   Engineering: "engineering",
