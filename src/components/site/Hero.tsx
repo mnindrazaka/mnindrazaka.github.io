@@ -22,7 +22,7 @@ export function Hero() {
       >
         {/* Left: text content */}
         <YStack flex={1} gap="$5">
-          <Chip label="FOUNDING ENGINEER" variant="accent" />
+          <Chip label="SOFTWARE ENGINEER" variant="accent" />
 
           {/* Headline with italic accent */}
           <Text
@@ -34,23 +34,30 @@ export function Hero() {
             $md={{ fontSize: 40, lineHeight: 50 }}
             $xs={{ fontSize: 32, lineHeight: 42 }}
           >
-            Building products, businesses, and communities{" "}
+            Building{" "}
             <Text
               style={{ fontFamily: fonts.display }}
               fontStyle="italic"
               color={accent}
             >
-              that
+              product
             </Text>{" "}
-            create real impact.
+            and{" "}
+            <Text
+              style={{ fontFamily: fonts.display }}
+              fontStyle="italic"
+              color={accent}
+            >
+              business
+            </Text>{" "}
+            that create real impact
           </Text>
 
           {/* Body */}
           <Text color={textMuted} fontSize={16} lineHeight={27} maxWidth={540}>
-            I&apos;m a software engineer and founder. I built a real business
-            (Gatherloop), created a custom POS system for it from scratch, and
-            ship end-to-end solutions that real teams rely on daily. I code,
-            lead, and obsess over outcomes.
+            I&apos;m a software engineer and founder. I built Gatherloop (board
+            game cafe) and developed a POS (Point Of Sale) for it from scratch,
+            and ship end-to-end solutions that teams rely on daily.
           </Text>
 
           {/* CTAs */}
@@ -88,7 +95,7 @@ export function Hero() {
 
           {/* Openness note */}
           <Text color={textMuted} fontSize={13} marginTop="$1">
-            Open to remote Founding Engineer opportunities (US / EU startups)
+            Open to remote Founding Engineer opportunities
           </Text>
         </YStack>
 

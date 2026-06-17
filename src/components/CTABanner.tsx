@@ -13,18 +13,9 @@ function MountainWithCup({ flip }: { flip?: boolean }) {
       style={flip ? { transform: "scaleX(-1)" } : undefined}
     >
       {/* Mountain silhouettes — layered for depth */}
-      <polygon
-        points="-30,300 80,110 190,300"
-        fill="rgba(255,255,255,0.03)"
-      />
-      <polygon
-        points="40,300 155,65 270,300"
-        fill="rgba(255,255,255,0.055)"
-      />
-      <polygon
-        points="100,300 230,95 360,300"
-        fill="rgba(255,255,255,0.03)"
-      />
+      <polygon points="-30,300 80,110 190,300" fill="rgba(255,255,255,0.03)" />
+      <polygon points="40,300 155,65 270,300" fill="rgba(255,255,255,0.055)" />
+      <polygon points="100,300 230,95 360,300" fill="rgba(255,255,255,0.03)" />
 
       {/* Coffee cup — sits above the mountain peaks */}
       {/* Cup body */}
@@ -137,9 +128,9 @@ export function CTABanner() {
           lineHeight={27}
           textAlign="center"
         >
-          Open to remote Founding Engineer opportunities with early-stage
-          startups in the US and EU. Building something meaningful? Let&apos;s
-          talk — I&apos;d love to hear about it.
+          Open to remote Software Engineer opportunities with early-stage
+          startups. Building something meaningful? Let&apos;s talk — I&apos;d
+          love to hear about it.
         </Text>
 
         <Anchor href="mailto:mnindrazaka@gmail.com" textDecorationLine="none">
@@ -152,7 +143,12 @@ export function CTABanner() {
             hoverStyle={{ opacity: 0.85 }}
             animation="quick"
           >
-            <Text color="#FFFFFF" fontSize={15} fontWeight="700" letterSpacing={0.3}>
+            <Text
+              color="#FFFFFF"
+              fontSize={15}
+              fontWeight="700"
+              letterSpacing={0.3}
+            >
               Let&apos;s talk →
             </Text>
           </YStack>

@@ -51,7 +51,7 @@ export const footerColors = {
 } as const;
 
 export const fonts = {
-  display: "'Fraunces', serif",
+  display: "sans-serif",
   body: "'Lato', system-ui, sans-serif",
 } as const;
 
