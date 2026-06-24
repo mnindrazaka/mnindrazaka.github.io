@@ -1,53 +1,62 @@
 // Design token definitions — single source of truth for the palette.
 // Components import from here; never hardcode raw hex values in UI files.
+//
+// Accent theme: Blue. Neutrals carry a subtle cool (blue) tint so the
+// surfaces feel cohesive with the accent in both light and dark mode.
+// Low-opacity accent overlays in components reference the shared blue
+// RGB `59,130,246` (see `accentRgb` below).
+
+// Shared accent RGB for translucent overlays/tints (matches blue-500).
+// Kept mode-agnostic so subtle accent washes read correctly in light & dark.
+export const accentRgb = "59,130,246" as const;
 
 export const lightColors = {
-  bg: "#FAF7F2",
-  surface: "#F4EFE6",
-  border: "#E8E0D5",
-  text: "#1A1613",
-  textMuted: "rgba(26,22,19,0.6)",
-  accent: "#B8893A",
+  bg: "#F6F8FC",
+  surface: "#EAF0F9",
+  border: "#D7E0EE",
+  text: "#0F1722",
+  textMuted: "rgba(15,23,34,0.6)",
+  accent: "#2563EB",
   // Category chip backgrounds
-  chipProduct: "#F4EFE6",
-  chipProductText: "#7A5020",
-  chipEngineering: "#E4EDE4",
-  chipEngineeringText: "#2D5A2D",
-  chipLeadership: "#EDE8F4",
-  chipLeadershipText: "#4A357A",
-  chipBusiness: "#F4EAD8",
-  chipBusinessText: "#7A4E18",
-  chipCareer: "#F0E0D8",
-  chipCareerText: "#7A3020",
+  chipProduct: "#E5EEFB",
+  chipProductText: "#1D4FA0",
+  chipEngineering: "#E3EDE6",
+  chipEngineeringText: "#2D5A3D",
+  chipLeadership: "#EAE8F6",
+  chipLeadershipText: "#473A85",
+  chipBusiness: "#DCEFF1",
+  chipBusinessText: "#15616B",
+  chipCareer: "#F3E2EA",
+  chipCareerText: "#8A2B52",
 } as const;
 
 export const darkColors = {
-  bg: "#15110E",
-  surface: "#1E1915",
-  border: "#2A2420",
-  text: "#F5EFE4",
-  textMuted: "rgba(245,239,228,0.6)",
-  accent: "#B8893A",
-  chipProduct: "#2A2318",
-  chipProductText: "#C4A060",
-  chipEngineering: "#1A2418",
-  chipEngineeringText: "#7AB87A",
-  chipLeadership: "#221A2A",
-  chipLeadershipText: "#9A8ABA",
-  chipBusiness: "#2A2018",
-  chipBusinessText: "#C4A060",
-  chipCareer: "#2A1A18",
-  chipCareerText: "#C48070",
+  bg: "#0B1019",
+  surface: "#141B27",
+  border: "#243140",
+  text: "#E9EFF7",
+  textMuted: "rgba(233,239,247,0.6)",
+  accent: "#5B9BFF",
+  chipProduct: "#16243C",
+  chipProductText: "#7FB2F7",
+  chipEngineering: "#16241C",
+  chipEngineeringText: "#7CC495",
+  chipLeadership: "#1E1A2E",
+  chipLeadershipText: "#A99AD0",
+  chipBusiness: "#0F2A30",
+  chipBusinessText: "#5FC7D2",
+  chipCareer: "#2A1722",
+  chipCareerText: "#E58BAB",
 } as const;
 
 // Always-dark footer tokens (footer stays dark in both modes per design)
 export const footerColors = {
-  bg: "#1A1613",
-  surface: "#231E1A",
-  border: "rgba(245,239,228,0.08)",
-  text: "#F5EFE4",
-  textMuted: "rgba(245,239,228,0.5)",
-  accent: "#B8893A",
+  bg: "#0C121C",
+  surface: "#151D2A",
+  border: "rgba(233,239,247,0.08)",
+  text: "#E9EFF7",
+  textMuted: "rgba(233,239,247,0.5)",
+  accent: "#5B9BFF",
 } as const;
 
 export const fonts = {

@@ -42,7 +42,7 @@ const techStack = [
   { icon: Code2, name: "TypeScript", color: "#3178C6" },
   { icon: Database, name: "PostgreSQL", color: "#336791" },
   { icon: Layers, name: "Nx Monorepo", color: "#143055" },
-  { icon: Building2, name: "Clean Arch.", color: "#B8893A" },
+  { icon: Building2, name: "Clean Arch.", color: "#2563EB" },
 ];
 
 const impactStats = [

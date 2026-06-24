@@ -2,6 +2,7 @@ import React from "react";
 import { Text, XStack, YStack } from "tamagui";
 import { Check } from "@tamagui/lucide-icons";
 import { useThemeTokens } from "@/theme/useThemeTokens";
+import { accentRgb } from "@/theme/tokens";
 
 type ChecklistProps = {
   items: string[];
@@ -18,7 +19,7 @@ export function Checklist({ items }: ChecklistProps) {
             width={24}
             height={24}
             borderRadius={100}
-            backgroundColor="rgba(184,137,58,0.15)"
+            backgroundColor={`rgba(${accentRgb},0.15)`}
             alignItems="center"
             justifyContent="center"
             flexShrink={0}

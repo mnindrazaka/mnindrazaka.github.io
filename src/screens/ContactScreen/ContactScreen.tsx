@@ -16,7 +16,7 @@ import { Footer } from "@/components/site/Footer";
 import { Section } from "@/components/Section";
 import { Chip } from "@/components/Chip";
 import { useThemeTokens } from "@/theme/useThemeTokens";
-import { fonts, layout } from "@/theme/tokens";
+import { accentRgb, fonts, layout } from "@/theme/tokens";
 
 const CONTACT_ITEMS = [
   {
@@ -156,7 +156,7 @@ export function ContactScreen() {
                     width={48}
                     height={48}
                     borderRadius={12}
-                    backgroundColor={`rgba(184,137,58,0.1)`}
+                    backgroundColor={`rgba(${accentRgb},0.1)`}
                     alignItems="center"
                     justifyContent="center"
                     flexShrink={0}
@@ -199,7 +199,7 @@ export function ContactScreen() {
                 width={48}
                 height={48}
                 borderRadius={12}
-                backgroundColor={`rgba(184,137,58,0.1)`}
+                backgroundColor={`rgba(${accentRgb},0.1)`}
                 alignItems="center"
                 justifyContent="center"
                 flexShrink={0}
