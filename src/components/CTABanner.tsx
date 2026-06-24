@@ -1,6 +1,6 @@
 import React from "react";
 import { Anchor, Text, YStack } from "tamagui";
-import { fonts, footerColors, layout, radii } from "@/theme/tokens";
+import { accentRgb, fonts, footerColors, layout, radii } from "@/theme/tokens";
 
 function MountainWithCup({ flip }: { flip?: boolean }) {
   return (
@@ -25,14 +25,14 @@ function MountainWithCup({ flip }: { flip?: boolean }) {
         width="74"
         height="56"
         rx="8"
-        stroke="rgba(184,137,58,0.32)"
+        stroke={`rgba(${accentRgb},0.32)`}
         strokeWidth="2.5"
-        fill="rgba(184,137,58,0.06)"
+        fill={`rgba(${accentRgb},0.06)`}
       />
       {/* Handle */}
       <path
         d="M138 28 C162 28 162 60 138 60"
-        stroke="rgba(184,137,58,0.32)"
+        stroke={`rgba(${accentRgb},0.32)`}
         strokeWidth="2.5"
         fill="none"
         strokeLinecap="round"
@@ -40,7 +40,7 @@ function MountainWithCup({ flip }: { flip?: boolean }) {
       {/* Saucer arc */}
       <path
         d="M50 74 Q101 86 152 74"
-        stroke="rgba(184,137,58,0.22)"
+        stroke={`rgba(${accentRgb},0.22)`}
         strokeWidth="2"
         fill="none"
         strokeLinecap="round"
@@ -48,7 +48,7 @@ function MountainWithCup({ flip }: { flip?: boolean }) {
       {/* Steam — left wave */}
       <path
         d="M82 12 C82 3 89 3 89 12 C89 21 96 21 96 12"
-        stroke="rgba(184,137,58,0.22)"
+        stroke={`rgba(${accentRgb},0.22)`}
         strokeWidth="1.8"
         fill="none"
         strokeLinecap="round"
@@ -56,7 +56,7 @@ function MountainWithCup({ flip }: { flip?: boolean }) {
       {/* Steam — right wave */}
       <path
         d="M106 8 C106 -1 113 -1 113 8 C113 17 120 17 120 8"
-        stroke="rgba(184,137,58,0.22)"
+        stroke={`rgba(${accentRgb},0.22)`}
         strokeWidth="1.8"
         fill="none"
         strokeLinecap="round"
@@ -66,9 +66,9 @@ function MountainWithCup({ flip }: { flip?: boolean }) {
 }
 
 export function CTABanner() {
-  const bannerBg = "#26190F";
-  const textColor = "#F5EFE4";
-  const textMuted = "rgba(245,239,228,0.62)";
+  const bannerBg = "#0F1B2E";
+  const textColor = "#E9EFF7";
+  const textMuted = "rgba(233,239,247,0.62)";
   const accent = footerColors.accent;
 
   return (

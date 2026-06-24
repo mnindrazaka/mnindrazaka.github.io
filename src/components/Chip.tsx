@@ -1,6 +1,7 @@
 import React from "react";
 import { Text, XStack } from "tamagui";
 import { useThemeTokens } from "@/theme/useThemeTokens";
+import { accentRgb } from "@/theme/tokens";
 
 export type ChipVariant =
   | "product"
@@ -27,8 +28,8 @@ export function Chip({ label, variant = "default", size = "md" }: ChipProps) {
     business: tokens.chipBusiness,
     career: tokens.chipCareer,
     accent: tokens.isDark
-      ? "rgba(184,137,58,0.15)"
-      : "rgba(184,137,58,0.1)",
+      ? `rgba(${accentRgb},0.15)`
+      : `rgba(${accentRgb},0.1)`,
     default: tokens.surface,
   };
 
@@ -48,7 +49,7 @@ export function Chip({ label, variant = "default", size = "md" }: ChipProps) {
     leadership: undefined,
     business: undefined,
     career: undefined,
-    accent: "rgba(184,137,58,0.35)",
+    accent: `rgba(${accentRgb},0.35)`,
     default: tokens.border,
   };
 
