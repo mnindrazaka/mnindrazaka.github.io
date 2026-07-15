@@ -1,4 +1,5 @@
 export * from "./HomeScreen";
+export * from "./LandingScreen";
 export * from "./BlogDetailScreen";
 export * from "./WritingScreen";
 export * from "./BusinessScreen";

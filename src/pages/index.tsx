@@ -1,13 +1,13 @@
-import { HomeScreen, HomeScreenProps } from "@/screens";
+import { LandingScreen, LandingScreenProps } from "@/screens";
 import { GetStaticProps } from "next";
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 
-export const getStaticProps: GetStaticProps<HomeScreenProps> = async () => {
+export const getStaticProps: GetStaticProps<LandingScreenProps> = async () => {
   const fileNames = fs.readdirSync(path.resolve("src", "contents"));
 
-  const posts: HomeScreenProps["posts"] = [];
+  const posts: LandingScreenProps["posts"] = [];
 
   for (const fileName of fileNames) {
     const content = await import(`../contents/${fileName}`);
@@ -38,4 +38,4 @@ export const getStaticProps: GetStaticProps<HomeScreenProps> = async () => {
   };
 };
 
-export default HomeScreen;
+export default LandingScreen;
