@@ -1,6 +1,6 @@
 # Landing Page Redesign — PRD
 
-> Redesign the home page (`/`) into a **minimalistic, professional, Linktree-inspired** landing: a single centered mobile-first column containing a hero, a simple portfolio list, a simple blog list, and social media links. Nothing else.
+> Redesign the home page (`/`) into a **minimalistic, professional, Linktree-inspired** landing: a single centered mobile-first column containing a hero, a simple portfolio list, a "Previously Work at" list, a simple blog list, and social media links. Nothing else.
 
 Status: **Draft**
 Owner: M. Nindra Zaka
@@ -18,8 +18,9 @@ We are moving in the opposite direction: a calm, minimal, personal page in the s
 
 - The blog detail experience at `/blog/[slug]` (markdown rendering, syntax highlighting). The landing page's blog list links into it.
 - The 10 markdown posts under `src/contents/` and their frontmatter format.
-- The case-study pages `/business` and `/pos-system` (the portfolio list links to them).
 - The stack: Next.js (pages router, `output: "export"`), Tamagui, React Native Web.
+
+The internal case-study pages `/business` and `/pos-system` are **not** part of the new landing page: portfolio rows link to external landing pages outside this site, so those pages become orphaned (their fate is handled in the cleanup phase).
 
 ---
 
@@ -27,12 +28,13 @@ We are moving in the opposite direction: a calm, minimal, personal page in the s
 
 1. **Minimal & professional.** One column, no cards-with-stats, no category chips, no filters, no CTA banners. Text-first.
 2. **Mobile-first.** Designed at 360 px and scaled up by doing almost nothing: the column simply centers with a max width (~600 px) on larger screens.
-3. **Everything reachable in one scroll.** Hero → Portfolio → Blogs → Social. All posts are listed (only 10 exist), no pagination, no "view all" page needed.
+3. **Everything reachable in one scroll.** Hero → Portfolio → Previously Work at → Blogs → Social. All posts are listed (only 10 exist), no pagination, no "view all" page needed.
 4. **Fast.** Almost no images, no heavy sections. Lighthouse Performance ≥ 95 on mobile.
 
 ### Non-goals
 
-- Redesigning the blog detail page, `/business`, or `/pos-system` (they keep their current design; a light chrome alignment can come later as follow-up work outside this PRD).
+- Redesigning the blog detail page (it keeps its current design; a light chrome alignment can come later as follow-up work outside this PRD).
+- Building or redesigning the external project landing pages the portfolio links to — they live outside this site.
 - Adding a CMS, analytics, contact form, or newsletter.
 - Categorization, tags, search, or filtering of posts/projects.
 - Dark/light theme toggle UI on the page (respecting the system theme via the existing Tamagui theme setup is enough).
@@ -60,14 +62,25 @@ Top-to-bottom:
   - **Title** (e.g. "Gatherloop Cafe & Board Game")
   - One-line description underneath (muted color).
 - No categories, no images, no stat blocks, no chips.
+- Each row links to the project's **external landing page** (outside this site), opening in a new tab. The internal case-study pages `/business` and `/pos-system` are not used.
 - Initial content (data lives in a simple array in code):
   | Title | One-liner | Links to |
   |---|---|---|
-  | Gatherloop Cafe & Board Game | A board game cafe serving 100+ customers daily | `/business` |
-  | Point of Sale | POS system built in-house to run Gatherloop's daily operations | `/pos-system` |
+  | Gatherloop Cafe & Board Game | A board game cafe serving 100+ customers daily | external URL (TBD, see §8) |
+  | Point of Sale | POS system built in-house to run Gatherloop's daily operations | external URL (TBD, see §8) |
 - Rows must have a clear pressed/hover state and a minimum tap height of 44 px.
 
-### 3.3 Blogs — simple list, all posts
+### 3.3 Previously Work at — simple list
+
+- Section label: `Previously Work at`.
+- A plain vertical list of previous companies, same row style as Portfolio. Each item is one tappable row:
+  - **Company name**
+  - Optional one-liner underneath (role, e.g. "Senior Frontend Engineer"), muted color.
+- Each row links to the **company's website**, opening in a new tab.
+- No logos, no date ranges, no descriptions of responsibilities — this is a link list, not a resume.
+- Company list and URLs: TBD (see §8); data lives in a simple array in code, ordered most recent first.
+
+### 3.4 Blogs — simple list, all posts
 
 - Section label: `Blogs`.
 - All posts listed (currently 10), sorted by date descending — reuse the existing `getStaticProps` loading in `src/pages/index.tsx` (gray-matter over `src/contents/`).
@@ -77,7 +90,7 @@ Top-to-bottom:
 - No thumbnails, no descriptions, no categories, no "highlighted" treatment.
 - Clicking navigates to `/blog/[slug]` to read the post. That's the whole flow.
 
-### 3.4 Social Media
+### 3.5 Social Media
 
 - Section at the bottom: a horizontal row of icon links (Tamagui Lucide icons already available):
   - GitHub — https://github.com/mnindrazaka
@@ -108,7 +121,7 @@ Reference feel: Linktree profile pages — single column, avatar on top, stacked
 ## 5. Technical notes
 
 - New screen: `src/screens/LandingScreen/` replacing `HomeScreen` as the component rendered by `src/pages/index.tsx`. Keep `HomeScreen` in the tree until cleanup phase to keep diffs small.
-- New small components live under `src/screens/LandingScreen/` (they are not reused elsewhere): `HeroSection`, `LinkListItem` (shared by portfolio + blog rows), `SocialLinks`.
+- New small components live under `src/screens/LandingScreen/` (they are not reused elsewhere): `HeroSection`, `LinkListItem` (shared by portfolio + previously-work-at + blog rows), `SocialLinks`.
 - Post loading: keep the existing `getStaticProps` in `src/pages/index.tsx`; only stop slicing to 4 and drop fields the new list doesn't need (image, category).
 - Static export (`output: "export"`) is unaffected; no new data sources.
 - SEO: keep `<Head>` meta from the current home page, updating description to match the simpler positioning; keep OG tags.
@@ -120,9 +133,9 @@ Reference feel: Linktree profile pages — single column, avatar on top, stacked
 
 - The page renders correctly and comfortably at 360 px, 768 px, and 1440 px (column simply centers; no layout shifts between breakpoints).
 - All 10 posts appear and each navigates to its detail page.
-- Portfolio rows navigate to `/business` and `/pos-system`.
+- Portfolio and Previously-Work-at rows open their external websites in a new tab.
 - Lighthouse (mobile, throttled): Performance ≥ 95, Accessibility ≥ 95.
-- `yarn build` (static export) passes; `/blog/[slug]`, `/business`, `/pos-system` behave exactly as before.
+- `yarn build` (static export) passes; `/blog/[slug]` behaves exactly as before.
 
 ---
 
@@ -143,12 +156,20 @@ Each phase is a **single, small, reviewable PR**. Every PR leaves `main` shippab
 ### Phase 2 — Portfolio list
 **PR: `feat: add portfolio list to landing page`**
 
-- Add the reusable `LinkListItem` row component (title + muted one-liner, full-row link, hover/pressed/focus states, ≥ 44 px tap height).
-- Add the `Portfolio` section with the two project entries linking to `/business` and `/pos-system`. Data as a plain array in the screen.
+- Add the reusable `LinkListItem` row component (title + muted one-liner, full-row link, hover/pressed/focus states, ≥ 44 px tap height, supports external links via `target="_blank"` + `rel="noopener noreferrer"`).
+- Add the `Portfolio` section with the two project entries linking to their external landing pages. Data as a plain array in the screen.
 
-*Acceptance:* both rows render and navigate; keyboard focus visible; no categories/images/stats anywhere.
+*Acceptance:* both rows render and open the external sites in a new tab; keyboard focus visible; no categories/images/stats anywhere.
 
-### Phase 3 — Blog list
+### Phase 3 — Previously Work at list
+**PR: `feat: add previously-work-at list to landing page`**
+
+- Add the `Previously Work at` section reusing `LinkListItem` (company name + optional role one-liner), most recent first.
+- Each row opens the company website in a new tab. Data as a plain array in the screen.
+
+*Acceptance:* all company rows render and open the correct websites in a new tab; consistent row styling with Portfolio.
+
+### Phase 4 — Blog list
 **PR: `feat: add blog list to landing page`**
 
 - Add the `Blogs` section listing **all** posts (title + formatted date), newest first, reusing `LinkListItem`.
@@ -157,7 +178,7 @@ Each phase is a **single, small, reviewable PR**. Every PR leaves `main` shippab
 
 *Acceptance:* all 10 posts listed in date-descending order; every row opens the correct post detail; build passes.
 
-### Phase 4 — Social media + footer line
+### Phase 5 — Social media + footer line
 **PR: `feat: add social links to landing page`**
 
 - Add the icon row (GitHub, LinkedIn, Twitter/X, Email) with hover states and `aria-label`s; external links open in a new tab.
@@ -165,18 +186,18 @@ Each phase is a **single, small, reviewable PR**. Every PR leaves `main` shippab
 
 *Acceptance:* all four links resolve to the right destinations; icons legible in both themes.
 
-### Phase 5 — Cleanup & de-scope old home
+### Phase 6 — Cleanup & de-scope old home
 **PR: `chore: remove unused home page components`**
 
-- Delete `HomeScreen` and components now unused anywhere: `Hero` (site), `Navbar`, `Footer`, `CTABanner`, `IconStat`, `ProjectCard`, `PostCard`, `SectionHeader`, `Chip`, etc. — *verify each with a usage search first*; anything still imported by `/business`, `/pos-system`, `/writing`, `/about`, or `/contact` stays.
-- Decide fate of now-orphaned nav-dependent pages (`/writing`, `/about`, `/contact`): keep them reachable by URL for now (they still build), just no longer linked from the landing page. Removing them is out of scope.
+- Delete `HomeScreen` and components now unused anywhere: `Hero` (site), `Navbar`, `Footer`, `CTABanner`, `IconStat`, `ProjectCard`, `PostCard`, `SectionHeader`, `Chip`, etc. — *verify each with a usage search first*; anything still imported by a page that stays must stay too.
+- Decide fate of now-orphaned pages (`/business`, `/pos-system`, `/writing`, `/about`, `/contact`): keep them reachable by URL for now (they still build), just no longer linked from the landing page. Removing or redirecting them is out of scope.
 - Update `docs/` to mark the old `REDESIGN_PRD.md` as superseded by this document.
 
 *Acceptance:* `yarn build` and `yarn lint` pass; no dead imports; site pages that remain still render.
 
 ### Phase ordering rationale
 
-Phases 1–4 each add one visible section, are independent to review, and keep the page presentable after every merge (a hero-only page is already a valid minimal profile). Phase 5 is deliberately last so no deletion happens until the new page is fully in place.
+Phases 1–5 each add one visible section, are independent to review, and keep the page presentable after every merge (a hero-only page is already a valid minimal profile). Phase 6 is deliberately last so no deletion happens until the new page is fully in place.
 
 ---
 
@@ -185,4 +206,6 @@ Phases 1–4 each add one visible section, are independent to review, and keep t
 1. **Bio copy** — final 1–2 sentence bio text for the hero (current suggestion in §3.1 is a placeholder).
 2. **Avatar photo** — which photo to use for `public/images/avatar.jpg`.
 3. **Twitter/X handle** — `@mnindrazaka` is assumed from existing meta tags; confirm the profile URL.
-4. **Orphaned pages** — should `/writing`, `/about`, `/contact` eventually be deleted or redirected? (Out of scope here; tracked for a follow-up.)
+4. **Portfolio external URLs** — the landing-page URLs for Gatherloop and the POS system (they live outside this site).
+5. **Previous companies** — the list of companies for "Previously Work at": names, optional role one-liners, and website URLs, ordered most recent first.
+6. **Orphaned pages** — should `/business`, `/pos-system`, `/writing`, `/about`, `/contact` eventually be deleted or redirected? (Out of scope here; tracked for a follow-up.)
