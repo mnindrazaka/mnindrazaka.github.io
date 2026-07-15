@@ -1,16 +1,40 @@
 import React from "react";
 import Head from "next/head";
-import { YStack } from "tamagui";
+import { Text, YStack } from "tamagui";
 import { Post } from "@/components";
 import { useThemeTokens } from "@/theme/useThemeTokens";
 import { HeroSection } from "./HeroSection";
+import { LinkListItem } from "./LinkListItem";
 
 export type LandingScreenProps = {
   posts: Post[];
 };
 
+type PortfolioItem = {
+  title: string;
+  description: string;
+  href: string;
+  external: boolean;
+};
+
+const portfolioItems: PortfolioItem[] = [
+  {
+    title: "Gatherloop Cafe & Board Game",
+    description: "A board game cafe serving 100+ customers daily",
+    href: "/business",
+    external: false,
+  },
+  {
+    title: "Point of Sale",
+    description:
+      "POS system built in-house to run Gatherloop's daily operations",
+    href: "https://pos.gatherloop.com",
+    external: true,
+  },
+];
+
 export function LandingScreen(_props: LandingScreenProps) {
-  const { bg } = useThemeTokens();
+  const { bg, textMuted } = useThemeTokens();
 
   return (
     <>
@@ -52,6 +76,29 @@ export function LandingScreen(_props: LandingScreenProps) {
           gap={48}
         >
           <HeroSection />
+
+          <YStack gap="$3">
+            <Text
+              fontSize={13}
+              fontWeight="700"
+              color={textMuted}
+              textTransform="uppercase"
+              letterSpacing={0.6}
+            >
+              Portfolio
+            </Text>
+            <YStack>
+              {portfolioItems.map((item) => (
+                <LinkListItem
+                  key={item.title}
+                  title={item.title}
+                  description={item.description}
+                  href={item.href}
+                  external={item.external}
+                />
+              ))}
+            </YStack>
+          </YStack>
         </YStack>
       </YStack>
     </>
