@@ -33,6 +33,31 @@ const portfolioItems: PortfolioItem[] = [
   },
 ];
 
+type WorkHistoryItem = {
+  company: string;
+  role?: string;
+  href: string;
+};
+
+// TODO: placeholder data — replace with real company history (PRD §8.5).
+const workHistoryItems: WorkHistoryItem[] = [
+  {
+    company: "Company A",
+    role: "Senior Frontend Engineer",
+    href: "https://example.com/company-a",
+  },
+  {
+    company: "Company B",
+    role: "Software Engineer",
+    href: "https://example.com/company-b",
+  },
+  {
+    company: "Company C",
+    role: "Frontend Engineer",
+    href: "https://example.com/company-c",
+  },
+];
+
 export function LandingScreen(_props: LandingScreenProps) {
   const { bg, textMuted } = useThemeTokens();
 
@@ -95,6 +120,29 @@ export function LandingScreen(_props: LandingScreenProps) {
                   description={item.description}
                   href={item.href}
                   external={item.external}
+                />
+              ))}
+            </YStack>
+          </YStack>
+
+          <YStack gap="$3">
+            <Text
+              fontSize={13}
+              fontWeight="700"
+              color={textMuted}
+              textTransform="uppercase"
+              letterSpacing={0.6}
+            >
+              Previously Work at
+            </Text>
+            <YStack>
+              {workHistoryItems.map((item) => (
+                <LinkListItem
+                  key={item.company}
+                  title={item.company}
+                  description={item.role}
+                  href={item.href}
+                  external
                 />
               ))}
             </YStack>
