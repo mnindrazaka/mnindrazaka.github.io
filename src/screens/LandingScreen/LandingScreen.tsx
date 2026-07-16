@@ -1,13 +1,18 @@
 import React from "react";
 import Head from "next/head";
 import { Text, YStack } from "tamagui";
-import { Post } from "@/components";
 import { useThemeTokens } from "@/theme/useThemeTokens";
 import { HeroSection } from "./HeroSection";
 import { LinkListItem } from "./LinkListItem";
 
+export type BlogListItem = {
+  title: string;
+  href: string;
+  date: string;
+};
+
 export type LandingScreenProps = {
-  posts: Post[];
+  posts: BlogListItem[];
 };
 
 type PortfolioItem = {
@@ -58,7 +63,7 @@ const workHistoryItems: WorkHistoryItem[] = [
   },
 ];
 
-export function LandingScreen(_props: LandingScreenProps) {
+export function LandingScreen({ posts }: LandingScreenProps) {
   const { bg, textMuted } = useThemeTokens();
 
   return (
@@ -143,6 +148,28 @@ export function LandingScreen(_props: LandingScreenProps) {
                   description={item.role}
                   href={item.href}
                   external
+                />
+              ))}
+            </YStack>
+          </YStack>
+
+          <YStack gap="$3">
+            <Text
+              fontSize={13}
+              fontWeight="700"
+              color={textMuted}
+              textTransform="uppercase"
+              letterSpacing={0.6}
+            >
+              Blogs
+            </Text>
+            <YStack>
+              {posts.map((post) => (
+                <LinkListItem
+                  key={post.href}
+                  title={post.title}
+                  description={post.date}
+                  href={post.href}
                 />
               ))}
             </YStack>

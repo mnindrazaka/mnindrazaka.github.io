@@ -7,7 +7,7 @@ import matter from "gray-matter";
 export const getStaticProps: GetStaticProps<LandingScreenProps> = async () => {
   const fileNames = fs.readdirSync(path.resolve("src", "contents"));
 
-  const posts: LandingScreenProps["posts"] = [];
+  const posts: { title: string; href: string; rawDate: string }[] = [];
 
   for (const fileName of fileNames) {
     const content = await import(`../contents/${fileName}`);
@@ -15,25 +15,28 @@ export const getStaticProps: GetStaticProps<LandingScreenProps> = async () => {
 
     posts.push({
       title: meta.data.title,
-      description: meta.data.description,
       href: `/blog/${fileName.replace(".md", "")}`,
-      imageUrl: meta.data.image,
-      date: new Date(meta.data.date).toLocaleDateString(undefined, {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      }),
-      category: meta.data.category ?? "Engineering",
+      rawDate: meta.data.date,
     });
   }
 
   return {
     props: {
-      posts: posts.sort(
-        (prevPost, nextPost) =>
-          new Date(nextPost.date).getTime() - new Date(prevPost.date).getTime()
-      ),
+      posts: posts
+        .sort(
+          (prevPost, nextPost) =>
+            new Date(nextPost.rawDate).getTime() -
+            new Date(prevPost.rawDate).getTime()
+        )
+        .map(({ title, href, rawDate }) => ({
+          title,
+          href,
+          date: new Date(rawDate).toLocaleDateString(undefined, {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          }),
+        })),
     },
   };
 };
