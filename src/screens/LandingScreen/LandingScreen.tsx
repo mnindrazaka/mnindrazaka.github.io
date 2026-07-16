@@ -25,16 +25,16 @@ type PortfolioItem = {
 
 const portfolioItems: PortfolioItem[] = [
   {
-    title: "Gatherloop Cafe & Board Game",
-    description: "A board game cafe serving 100+ customers daily",
-    href: "/business",
-    external: false,
+    title: "Gatherloop Board Game Cafe",
+    description:
+      "The first board game cafe in Probolinggo, serving 100+ customers daily",
+    href: "https://gatherloop.github.io",
+    external: true,
   },
   {
     title: "Point of Sale",
-    description:
-      "POS system built in-house to run Gatherloop's daily operations",
-    href: "https://pos.gatherloop.com",
+    description: "POS built in-house to run Gatherloop's daily operations",
+    href: "https://gatherloop.github.io/gatherloop-pos",
     external: true,
   },
 ];
@@ -48,19 +48,24 @@ type WorkHistoryItem = {
 // TODO: placeholder data — replace with real company history (PRD §8.5).
 const workHistoryItems: WorkHistoryItem[] = [
   {
-    company: "Company A",
-    role: "Senior Frontend Engineer",
-    href: "https://example.com/company-a",
-  },
-  {
-    company: "Company B",
+    company: "ADPList",
     role: "Software Engineer",
-    href: "https://example.com/company-b",
+    href: "https://adplist.org",
   },
   {
-    company: "Company C",
+    company: "Karirlab",
+    role: "Lead Frontend Engineer",
+    href: "https://www.linkedin.com/company/karirlab",
+  },
+  {
+    company: "Ruangguru",
     role: "Frontend Engineer",
-    href: "https://example.com/company-c",
+    href: "https://ruangguru.com/",
+  },
+  {
+    company: "Feedloop",
+    role: "Frontend Engineer",
+    href: "https://feedloop.ai/",
   },
 ];
 

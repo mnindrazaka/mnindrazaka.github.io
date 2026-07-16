@@ -17,12 +17,6 @@ const SOCIAL_LINKS = [
     external: true,
   },
   {
-    icon: Twitter,
-    label: "Twitter/X",
-    href: "https://x.com/mnindrazaka",
-    external: true,
-  },
-  {
     icon: Mail,
     label: "Email",
     href: "mailto:mnindrazaka@gmail.com",
