@@ -4,6 +4,7 @@ import { Text, YStack } from "tamagui";
 import { useThemeTokens } from "@/theme/useThemeTokens";
 import { HeroSection } from "./HeroSection";
 import { LinkListItem } from "./LinkListItem";
+import { SocialLinks } from "./SocialLinks";
 
 export type BlogListItem = {
   title: string;
@@ -174,6 +175,8 @@ export function LandingScreen({ posts }: LandingScreenProps) {
               ))}
             </YStack>
           </YStack>
+
+          <SocialLinks />
         </YStack>
       </YStack>
     </>
