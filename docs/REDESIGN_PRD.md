@@ -1,5 +1,7 @@
 # Personal Website Redesign — PRD
 
+> **Superseded:** the home page (`/`) direction described here has been replaced by [`LANDING_PAGE_REDESIGN_PRD.md`](./LANDING_PAGE_REDESIGN_PRD.md), which redesigns it into a minimal, Linktree-inspired single-column profile. This document is kept for historical reference only; the case-study pages (`/business`, `/pos-system`) and other sections it describes are otherwise unaffected.
+
 > Repositioning M. Nindra Zaka's personal site from a generic "senior engineer portfolio" into a brand statement: **a software engineer who understands business impact** — someone who builds products, runs a real business, and ships outcomes, not just code.
 
 ---
