@@ -1,6 +1,3 @@
-import { Chip, ChipVariant } from "@/components";
-import { Footer } from "@/components/site/Footer";
-import { Navbar } from "@/components/site/Navbar";
 import { fonts, radii } from "@/theme/tokens";
 import { useThemeTokens } from "@/theme/useThemeTokens";
 import { ArrowLeft } from "@tamagui/lucide-icons";
@@ -20,14 +17,6 @@ export type BlogDetailScreenProps = {
   category?: string | null;
 };
 
-const categoryVariantMap: Record<string, ChipVariant> = {
-  Product: "product",
-  Engineering: "engineering",
-  Leadership: "leadership",
-  Business: "business",
-  Career: "career",
-};
-
 export function BlogDetailScreen({
   title,
   description,
@@ -38,8 +27,6 @@ export function BlogDetailScreen({
   category,
 }: BlogDetailScreenProps) {
   const { bg, border, text, textMuted, accent } = useThemeTokens();
-  const cat = category ?? "Engineering";
-  const chipVariant: ChipVariant = categoryVariantMap[cat] ?? "engineering";
 
   return (
     <>
@@ -52,21 +39,17 @@ export function BlogDetailScreen({
         <meta property="og:description" content={description} />
         <meta property="og:image" content={image} />
       </Head>
-      <YStack backgroundColor={bg} minHeight="100vh">
-        <Navbar />
-
-        {/* Article reading column — max 720 px, centered */}
+      <YStack backgroundColor={bg} minHeight="100vh" alignItems="center">
         <YStack
-          flex={1}
-          maxWidth={720}
-          alignSelf="center"
           width="100%"
-          paddingHorizontal="$6"
-          paddingVertical="$10"
+          maxWidth={720}
+          paddingHorizontal="$4"
+          $gtXs={{ paddingHorizontal: 24 }}
+          paddingVertical={64}
           gap="$8"
         >
           {/* Back link */}
-          <Link href="/writing" style={{ textDecoration: "none" }}>
+          <Link href="/" style={{ textDecoration: "none" }}>
             <XStack alignItems="center" gap="$2" cursor="pointer">
               <ArrowLeft size={16} color={textMuted} />
               <Text
@@ -75,14 +58,24 @@ export function BlogDetailScreen({
                 fontWeight="500"
                 hoverStyle={{ color: accent }}
               >
-                Back to writing
+                Back to home
               </Text>
             </XStack>
           </Link>
 
           {/* Title + meta block */}
-          <YStack gap="$4">
-            <Chip label={cat} variant={chipVariant} size="sm" />
+          <YStack gap="$3">
+            {category && (
+              <Text
+                fontSize={13}
+                fontWeight="700"
+                color={textMuted}
+                textTransform="uppercase"
+                letterSpacing={0.6}
+              >
+                {category}
+              </Text>
+            )}
             <Text
               style={{ fontFamily: fonts.display }}
               fontSize={40}
@@ -118,8 +111,6 @@ export function BlogDetailScreen({
             <MarkdownView content={content} />
           </YStack>
         </YStack>
-
-        <Footer />
       </YStack>
     </>
   );
