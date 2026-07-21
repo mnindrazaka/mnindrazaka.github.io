@@ -1,6 +1,6 @@
-# Substack Posts on Landing Page — PRD
+# Substack Posts as the Blog Section — PRD
 
-> Add a section to the home page (`/`) that lists my latest **Substack** posts as a simple, tappable list. Each row opens the original Substack post in a new tab. Same minimal, typographic style as the existing "Blogs" section.
+> Replace the landing page's blog list with my latest **Substack** posts, and remove the old local-markdown blog entirely. The "Blogs" section on the home page (`/`) becomes a simple, tappable list of Substack posts; each row opens the original Substack post in a new tab.
 
 Status: **Draft**
 Owner: M. Nindra Zaka
@@ -10,42 +10,45 @@ Date: 2026-07-21
 
 ## 1. Background
 
-The landing page (`src/screens/LandingScreen/LandingScreen.tsx`) already renders several plain link lists — Portfolio, Previously Work at, and **Blogs** — all built from the same `LinkListItem` row component. The Blogs list is sourced from local markdown files in `src/contents/`, loaded at build time via `getStaticProps` in `src/pages/index.tsx`.
+The landing page (`src/screens/LandingScreen/LandingScreen.tsx`) renders several plain link lists — Portfolio, Previously Work at, and **Blogs** — all built from the same `LinkListItem` row component. Today the Blogs list is sourced from local markdown files in `src/contents/` (10 posts), loaded at build time via `getStaticProps` in `src/pages/index.tsx`, with a detail page at `/blog/[slug]` that renders the markdown.
 
-I also publish writing on **Substack**, which lives entirely outside this repo. Today none of it is surfaced on my site. I want a section on the landing page that lists my recent Substack posts and links out to them, so the two bodies of writing (local blog + Substack) are both discoverable from one place.
+I now publish my writing on **Substack** instead. I no longer want to maintain writing as local markdown in this repo. So:
+
+- The **Blogs section should list my Substack posts** (not local markdown), each linking out to Substack.
+- The **old local-markdown blog is removed** entirely — content files, the detail route, and the markdown-rendering code.
 
 ### Key constraints (from the current stack)
 
 - **Static export.** `next.config.js` sets `output: "export"`. There is no server runtime and no API routes at request time. All data must be resolved at **build time** (`getStaticProps`) or fetched **client-side** in the browser.
 - **Substack has no official API**, but every publication exposes a stable **RSS feed** at `https://<publication>.substack.com/feed` (XML: `title`, `link`, `pubDate`, `description`, `content:encoded`, …).
-- **CORS.** A browser-side `fetch()` of the Substack feed is blocked by CORS and would need a proxy. Fetching the feed from **Node at build time** has no such restriction — this is the deciding reason to fetch at build time, and it also matches how the Blogs list already works.
-- **Deploys are build-triggered.** `.github/workflows/deploy.yml` builds and deploys only on `push` to `main`. So a build-time list only refreshes when the site is rebuilt — freshness is addressed in §5 and Phase 3.
+- **CORS.** A browser-side `fetch()` of the Substack feed is blocked by CORS and would need a proxy. Fetching the feed from **Node at build time** has no such restriction — this is the deciding reason to fetch at build time, and it also matches how the Blogs list is loaded today.
+- **Deploys are build-triggered.** `.github/workflows/deploy.yml` builds and deploys only on `push` to `main`. So a build-time list only refreshes when the site is rebuilt — freshness is addressed in §5 and Phase 4.
 
 ### What stays untouched
 
-- The Blogs section and the local markdown posts under `src/contents/`.
-- The blog detail experience at `/blog/[slug]`.
+- The Portfolio, Previously Work at, and Social sections.
+- The `LinkListItem` row component and the single-column landing layout (the Blogs rows already use `LinkListItem`; they just change from internal links to external Substack links).
 - The stack: Next.js (pages router, `output: "export"`), Tamagui, React Native Web.
-- The `LinkListItem` row component and the overall single-column landing layout.
 
 ---
 
 ## 2. Goals
 
-1. **Surface Substack posts on the landing page** as a plain, tappable list matching the existing sections.
-2. **Click → original post.** Each row opens the canonical Substack URL in a new tab (`target="_blank"`, `rel="noopener noreferrer"`), consistent with the Portfolio / Previously-Work-at rows.
-3. **Zero runtime cost.** Resolved fully at build time; no client-side data fetching, no proxy, no extra network work in the browser. Static export (`output: "export"`) keeps working.
-4. **Never break the build.** If the Substack feed is unreachable or malformed during a build, the build still succeeds and the page degrades gracefully.
-5. **Consistent, minimal design.** Same `LinkListItem` rows (title + muted date), same rhythm and theming as the rest of the page.
+1. **Blogs section = Substack posts.** The existing "Blogs" list is populated from my Substack feed instead of local markdown.
+2. **Click → original post.** Each row opens the canonical Substack URL in a new tab (`target="_blank"`, `rel="noopener noreferrer"`), like the Portfolio / Previously-Work-at rows.
+3. **Remove the old markdown blog.** Delete the local content, the `/blog/[slug]` detail route, the `BlogDetailScreen` / markdown-rendering code, and the now-unused dependencies and build config.
+4. **Zero runtime cost.** Resolved fully at build time; no client-side data fetching, no proxy. Static export keeps working.
+5. **Never break the build.** If the Substack feed is unreachable or malformed during a build, the build still succeeds and the section degrades gracefully.
+6. **Consistent, minimal design.** Same `LinkListItem` rows (title + muted date), same rhythm and theming as the rest of the page.
 
 ### Non-goals
 
-- **Re-hosting or rendering post content on this site.** We link out to Substack; we do not build Substack post detail pages here. (`/blog/[slug]` remains only for local markdown.)
-- Newsletter signup / subscribe form, comments, or paywalled-content handling.
-- Search, tags, categories, or filtering of Substack posts.
-- Merging Substack posts and local blog posts into one combined list (they stay as two separate sections; a future merge is out of scope).
+- **Re-hosting or rendering Substack content on this site.** We link out to Substack; we do not build post detail pages here. After this work there is **no** post detail route on the site.
+- Redirecting old `/blog/<slug>` URLs to their Substack equivalents (there is no reliable slug mapping; old URLs simply stop existing — see §8).
+- Newsletter signup form, comments, or paywalled-content handling.
+- Search, tags, categories, or filtering of posts.
 - Any client-side/runtime fetching or a serverless proxy.
-- Backfilling old posts as local markdown.
+- Backfilling or migrating the old markdown posts into Substack (assumed already published there; see §9).
 
 ---
 
@@ -53,33 +56,31 @@ I also publish writing on **Substack**, which lives entirely outside this repo. 
 
 ### 3.1 Data source
 
-- Feed URL: `https://<publication>.substack.com/feed` (exact publication slug is an open question — see §8). Stored as a single constant/env var (`SUBSTACK_FEED_URL`), not hard-coded in multiple places.
+- Feed URL: `https://<publication>.substack.com/feed` (exact publication slug is an open question — see §9). Stored as a single constant/env var (`SUBSTACK_FEED_URL`), not hard-coded in multiple places.
 - Fetched **once at build time** in Node.
 - Parsed into a typed list. Each entry:
 
   | Field | Source (RSS) | Notes |
   |---|---|---|
   | `title` | `item.title` | Post title. |
-  | `url` | `item.link` | Canonical Substack post URL (the redirect target). |
+  | `href` | `item.link` | Canonical Substack post URL (the redirect target). |
   | `date` | `item.pubDate` | Formatted for display (e.g. "Jul 21, 2026"). |
   | `rawDate` | `item.pubDate` | Kept only for sorting. |
 
 - **Sort** newest-first by `rawDate`.
-- **Limit** to the latest **N** posts (default **N = 5**, a single constant) so the section stays short. Configurable in one place.
+- **Limit** to the latest **N** posts (default **N = 5**, a single constant) so the section stays short. Configurable in one place. (Or "show all" — see §9.)
 
-### 3.2 UI — "Writing on Substack" section
+### 3.2 UI — the "Blogs" section
 
-- A new section on the landing page, placed **directly after the existing "Blogs" section** (see §3.3 for ordering), styled identically to the other lists:
-  - Small quiet uppercase section label (working title: `Newsletter` or `Writing on Substack` — final label is an open question, §8).
-  - A vertical list of rows built with the existing `LinkListItem`:
+- Keep the existing Blogs section in place and in position; only its **data source and link target** change:
+  - Small quiet uppercase section label — keep `Blogs` (or rename, e.g. `Writing` / `Newsletter` — final label is an open question, §9).
+  - Rows built with the existing `LinkListItem`:
     - **Title** (bold).
     - **Date** underneath, muted.
-  - Each row is a full-width external link opening the Substack post in a new tab (`external` → `target="_blank"` + `rel="noopener noreferrer"`), min tap height 44 px, with the existing hover / pressed / focus states.
+  - Each row is now a full-width **external** link opening the Substack post in a new tab (`external` → `target="_blank"` + `rel="noopener noreferrer"`), keeping the current min tap height and hover / pressed / focus states.
 - **Empty state:** if there are zero posts (e.g. feed failed at build, see §4), the entire section — label included — is **not rendered**. No error message, no empty box.
 
-### 3.3 Placement & ordering
-
-Landing page top-to-bottom becomes: Hero → Portfolio → Previously Work at → **Blogs** → **Writing on Substack** → Social. Substack sits right after Blogs so the two writing lists are adjacent. (Final placement is minor and can be adjusted during Phase 2 review.)
+The landing page order is unchanged: Hero → Portfolio → Previously Work at → **Blogs** → Social.
 
 ---
 
@@ -89,7 +90,7 @@ The feed is an external dependency fetched during CI builds; it must never take 
 
 - The feed-fetch function **catches all errors** (network failure, non-200, timeout, malformed XML) and returns an **empty list** rather than throwing.
 - A short **timeout** (e.g. 10 s) prevents a hung feed from stalling the build.
-- On empty list, `getStaticProps` still returns valid props and the Substack section is simply hidden (§3.2 empty state).
+- On empty list, `getStaticProps` still returns valid props and the Blogs section is simply hidden (§3.2 empty state).
 - A single warning is logged to the build output when the feed can't be loaded, so a silent failure is still visible in CI logs.
 
 ---
@@ -101,59 +102,81 @@ Because deploys are build-triggered (`push` to `main`), the list only updates wh
 - **`workflow_dispatch`** on the deploy workflow → a manual "rebuild now" button after publishing on Substack.
 - **Scheduled rebuild** (`schedule:` cron, e.g. once daily) so new Substack posts appear within a day automatically.
 
-Both are additive changes to `.github/workflows/deploy.yml` and are delivered in Phase 3. (Real-time freshness is a non-goal — a build-time list is intentionally eventually-consistent.)
+Both are additive changes to `.github/workflows/deploy.yml` and are delivered in Phase 4. (Real-time freshness is a non-goal — a build-time list is intentionally eventually-consistent.)
 
 ---
 
 ## 6. Technical notes
 
-- **Parser dependency.** Add a small, well-maintained RSS parser (recommended: `rss-parser`, which runs in Node and handles Substack's feed shape, including `content:encoded`). Alternative: `fast-xml-parser` if we want zero RSS-specific abstraction. One dependency only.
-- **New module:** `src/lib/substack.ts` exporting a `SubstackPost` type and an async `fetchSubstackPosts()` that fetches → parses → sorts → limits, with the error handling from §4 built in. Keeping it in `src/lib/` (new folder) isolates the data plumbing from UI and from the page.
-- **Wiring:** `src/pages/index.tsx` `getStaticProps` calls `fetchSubstackPosts()` alongside the existing local-post logic and passes a `substackPosts` prop into `LandingScreen`. `LandingScreenProps` gains `substackPosts: BlogListItem[]` (the existing `{ title, href, date }` shape fits — `href` = the Substack URL, rendered as an `external` row).
-- **Reuse, don't rebuild:** the row UI is the existing `LinkListItem` with `external`; no new row component.
+- **Parser dependency.** Add a small, well-maintained RSS parser (recommended: `rss-parser`, which runs in Node and handles Substack's feed shape). One dependency in; several go out (see cleanup below), so net dependency count drops.
+- **New module:** `src/lib/substack.ts` exporting a `SubstackPost` type and an async `fetchSubstackPosts()` that fetches → parses → sorts → limits, with the §4 error handling built in. Keeping it in `src/lib/` isolates the data plumbing from UI and from the page.
+- **Wiring:** `src/pages/index.tsx` `getStaticProps` calls `fetchSubstackPosts()` and passes the result as the existing `posts` prop into `LandingScreen`. The current `BlogListItem` shape (`{ title, href, date }`) already fits — `href` becomes the Substack URL, and the Blogs rows render as `external`.
+- **Reuse, don't rebuild:** the row UI is the existing `LinkListItem` with `external`; no new row component and no layout change.
 - **Config:** `SUBSTACK_FEED_URL` and the post limit `N` live as named constants (env-overridable for the URL) so they're changed in one place.
-- Static export (`output: "export"`) is unaffected — the fetch happens in Node during `next build`, and the output stays fully static HTML.
+
+### Cleanup — what the old markdown blog removal deletes
+
+Verified against the current tree (usage-checked before removal in the cleanup phase):
+
+- Content: all files under `src/contents/` (10 markdown posts).
+- Route: `src/pages/blog/[slug].tsx`.
+- Screen: `src/screens/BlogDetailScreen/` (`BlogDetailScreen.tsx`, `MarkdownView.tsx`, `index.tsx`) and its re-export line in `src/screens/index.tsx`.
+- Loader: the local-post reading logic in `src/pages/index.tsx` `getStaticProps` (`fs`/`path`/`matter`/`import("../contents/…")`).
+- Build config: the `.md` `raw-loader` webpack rule in `next.config.js`.
+- Dependencies, once confirmed unreferenced elsewhere: `gray-matter`, `react-markdown`, `react-syntax-highlighter`, `@types/react-syntax-highlighter`, `remark-gfm` (already unused today), `raw-loader`.
+
+Static export (`output: "export"`) is unaffected throughout — the feed fetch happens in Node during `next build`, and the output stays fully static HTML.
 
 ---
 
 ## 7. Success criteria
 
-- The landing page shows a Substack section listing the latest N posts, newest-first, each opening the correct Substack URL in a new tab.
-- Row styling, spacing, focus/hover states, and theming are indistinguishable from the Blogs / Portfolio rows in both light and dark.
-- `yarn build` (static export) passes; the Blogs section and `/blog/[slug]` behave exactly as before.
-- With the feed forced to fail (bad URL / offline), `yarn build` **still succeeds** and the Substack section is simply absent — no crash, no empty box.
+- The landing page's Blogs section lists the latest N Substack posts, newest-first, each opening the correct Substack URL in a new tab.
+- Row styling, spacing, focus/hover states, and theming are unchanged from today's Blogs rows, in both light and dark.
+- The old markdown blog is gone: `src/contents/`, `/blog/[slug]`, and `BlogDetailScreen` no longer exist; `yarn build` and `yarn lint` pass with no dead imports and no removed-dependency references.
+- With the feed forced to fail (bad URL / offline), `yarn build` **still succeeds** and the Blogs section is simply absent — no crash, no empty box.
 - No client-side network request to Substack is made when viewing the page (verify in the browser network tab).
-- Lighthouse (mobile) is unchanged from the current landing page (no runtime data cost added).
+- Lighthouse (mobile) is unchanged or better versus today's landing page (no runtime data cost added; markdown/highlighter code removed).
 
 ---
 
 ## 8. Implementation phases
 
-Each phase is a **single, small, reviewable PR**. Every PR leaves `main` shippable: after Phase 1 nothing is visible but the build is unchanged; after Phase 2 the feature is live; Phase 3 only tunes freshness.
+Each phase is a **single, small, reviewable PR**. Every PR leaves `main` shippable.
 
 ### Phase 1 — Substack feed client (data layer, no UI)
 **PR: `feat: add build-time Substack feed client`**
 
 - Add the RSS parser dependency (`rss-parser`).
 - Create `src/lib/substack.ts`: the `SubstackPost` type, the `SUBSTACK_FEED_URL` + limit constants, and `fetchSubstackPosts()` (fetch → parse → sort newest-first → limit to N), with the §4 error handling (try/catch → `[]`, timeout, single warning log) built in from the start.
-- No page or UI change; the function is not called by any page yet.
+- No page or UI change; the function is not called by any page yet. The old markdown blog is fully intact.
 
-*Acceptance:* the module compiles and type-checks; run against the real feed (throwaway script or a temporary `console.log` in `getStaticProps`, reverted before merge) returns the expected posts; forcing a bad URL returns `[]` without throwing; `yarn build` and `yarn lint` pass. Nothing is rendered.
+*Acceptance:* the module compiles and type-checks; run against the real feed (throwaway script or a temporary `console.log`, reverted before merge) returns the expected posts; forcing a bad URL returns `[]` without throwing; `yarn build` and `yarn lint` pass. Nothing is rendered differently.
 
 *Why first:* isolates the one risky, external-dependency piece into a self-contained, easily-reviewed unit with no UI noise in the diff.
 
-### Phase 2 — Render the Substack section
-**PR: `feat: show Substack posts on landing page`**
+### Phase 2 — Point the Blogs section at Substack
+**PR: `feat: source landing blog list from Substack`**
 
-- Extend `getStaticProps` in `src/pages/index.tsx` to call `fetchSubstackPosts()` and pass `substackPosts` to `LandingScreen`.
-- Add `substackPosts` to `LandingScreenProps` and render the new "Writing on Substack" section using the existing `LinkListItem` (external rows), placed right after Blogs.
+- Change `getStaticProps` in `src/pages/index.tsx` to build `posts` from `fetchSubstackPosts()` instead of local markdown, and render the Blogs rows as `external`.
 - Implement the empty-state rule: render nothing (label included) when the list is empty.
+- Leave the old markdown blog files, `/blog/[slug]` route, and `BlogDetailScreen` **in place but now unlinked from the landing page** (they still build). Removal is the next phase.
 
-*Acceptance:* the section lists the latest N posts newest-first; each row opens the correct Substack URL in a new tab; styling matches the other sections in light and dark; with the feed forced to fail the build still passes and the section is absent; no client-side Substack request; `yarn build` passes.
+*Acceptance:* the Blogs section lists the latest N Substack posts newest-first; each row opens the correct Substack URL in a new tab; styling matches today; with the feed forced to fail the build still passes and the section is absent; no client-side Substack request; `yarn build` passes.
 
-*Why second:* the feature goes fully live here, and because Phase 1's client never throws, shipping this cannot break a deploy.
+*Why second:* the feature goes live in one small, safe diff. Because Phase 1's client never throws, shipping this cannot break a deploy. Keeping the deletion separate makes both PRs easy to review and easy to revert independently.
 
-### Phase 3 — Freshness (scheduled + manual rebuild)
+### Phase 3 — Remove the old markdown blog
+**PR: `chore: remove local markdown blog`**
+
+- Delete the content, route, screen, loader, build rule, and now-unused dependencies listed in §6 "Cleanup". Verify each dependency and module is unreferenced with a usage search before deleting.
+- Confirm no other page imports `BlogDetailScreen` or reads `src/contents/`.
+
+*Acceptance:* `yarn build` and `yarn lint` pass; no dead imports; `/blog/*` no longer exists in the export; the landing page still shows the Substack-sourced Blogs section; the site's other pages/sections are unchanged.
+
+*Why third:* deletion happens only after the replacement is live and verified, so `main` is always shippable and the risky external-feed change and the destructive cleanup are never entangled in one diff.
+
+### Phase 4 — Freshness (scheduled + manual rebuild)
 **PR: `ci: add scheduled and manual rebuild for Substack freshness`**
 
 - Add `workflow_dispatch` and a `schedule:` cron (e.g. daily) to `.github/workflows/deploy.yml` so new Substack posts appear without a content code-change.
@@ -161,19 +184,19 @@ Each phase is a **single, small, reviewable PR**. Every PR leaves `main` shippab
 
 *Acceptance:* the workflow can be triggered manually from the Actions tab; the scheduled trigger is present and valid; a scheduled/dispatched run rebuilds and redeploys, picking up any new Substack posts.
 
-*Why last:* purely an operational improvement; the feature is already correct and shippable after Phase 2. Kept separate so the CI change is reviewed on its own.
+*Why last:* purely an operational improvement; the feature is already correct and shippable after Phase 3. Kept separate so the CI change is reviewed on its own.
 
 ### Phase ordering rationale
 
-Phase 1 isolates the external-dependency risk with zero UI. Phase 2 turns it on in one small, safe diff. Phase 3 is an independent CI-only change. Each merges cleanly on its own and leaves the site working.
+Phase 1 isolates the external-dependency risk with zero UI. Phase 2 switches the section over in one small, safe diff while the old blog still exists as a fallback. Phase 3 does the destructive cleanup only once the replacement is proven. Phase 4 is an independent CI-only change. Each merges cleanly on its own and leaves the site working.
 
 ---
 
 ## 9. Open questions
 
 1. **Publication slug / feed URL** — the exact `https://<publication>.substack.com/feed` for `SUBSTACK_FEED_URL`.
-2. **Section label** — final wording: `Newsletter`, `Writing on Substack`, `Substack`, or something else.
-3. **Number of posts (N)** — default proposed is 5; confirm or set the desired count (or "show all").
-4. **Placement** — after Blogs (proposed) vs. before it vs. elsewhere in the column.
-5. **Scheduled rebuild cadence** — daily (proposed) vs. more/less frequent, for Phase 3.
-6. **Local vs. Substack overlap** — if a post exists both as local markdown and on Substack, do we care about de-duplication? (Assumed no for now; the two lists stay independent.)
+2. **Section label** — keep `Blogs`, or rename to `Writing` / `Newsletter` / `Substack`.
+3. **Number of posts (N)** — default proposed is 5; confirm, set another count, or "show all".
+4. **Old `/blog/<slug>` URLs** — after removal these 404. Acceptable, or do we want a holding page / redirect? (Proposed: accept the 404s; no reliable slug→Substack mapping exists.)
+5. **Content parity** — are all 10 existing markdown posts already published on Substack (so nothing is lost by deleting them), or should any be preserved/migrated first?
+6. **Scheduled rebuild cadence** — daily (proposed) vs. more/less frequent, for Phase 4.
