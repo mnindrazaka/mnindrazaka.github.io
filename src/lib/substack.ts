@@ -58,6 +58,13 @@ export async function fetchSubstackPosts(): Promise<SubstackPost[]> {
   try {
     const response = await fetch(SUBSTACK_FEED_URL, {
       signal: controller.signal,
+      headers: {
+        // Substack's edge (Cloudflare) 403s requests without a browser-like
+        // User-Agent, which Node's default fetch doesn't send.
+        "User-Agent":
+          "Mozilla/5.0 (compatible; mnindrazaka.github.io build; +https://mnindrazaka.github.io)",
+        Accept: "application/rss+xml, application/xml, text/xml, */*",
+      },
     });
 
     if (!response.ok) {
