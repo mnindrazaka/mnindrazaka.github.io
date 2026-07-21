@@ -2,7 +2,7 @@
 
 > Replace the landing page's blog list with my latest **Substack** posts, and remove the old local-markdown blog entirely. The "Blogs" section on the home page (`/`) becomes a simple, tappable list of Substack posts; each row opens the original Substack post in a new tab.
 
-Status: **Draft**
+Status: **Ready for implementation** (all open questions resolved)
 Owner: M. Nindra Zaka
 Date: 2026-07-21
 
@@ -98,12 +98,11 @@ The feed is an external dependency fetched during CI builds; it must never take 
 
 ## 5. Freshness
 
-Because deploys are build-triggered (`push` to `main`), the list only updates when the site rebuilds. Two mechanisms keep it reasonably fresh without a content code-change:
+Because deploys are build-triggered (`push` to `main`), the list only updates when the site rebuilds. Refresh is **manual by choice**:
 
-- **`workflow_dispatch`** on the deploy workflow → a manual "rebuild now" button after publishing on Substack.
-- **Scheduled rebuild** (`schedule:` cron, e.g. once daily) so new Substack posts appear within a day automatically.
+- **`workflow_dispatch`** on the deploy workflow → a manual "rebuild now" button in the Actions tab, run after publishing a new post on Substack.
 
-Both are additive changes to `.github/workflows/deploy.yml` and are delivered in Phase 4. (Real-time freshness is a non-goal — a build-time list is intentionally eventually-consistent.)
+No scheduled/cron rebuild — the site is rebuilt on demand. This is an additive change to `.github/workflows/deploy.yml`, delivered in Phase 4. (Real-time freshness is a non-goal — a build-time list is intentionally eventually-consistent, refreshed when I choose to rebuild.)
 
 ---
 
@@ -178,13 +177,13 @@ Each phase is a **single, small, reviewable PR**. Every PR leaves `main` shippab
 
 *Why third:* deletion happens only after the replacement is live and verified, so `main` is always shippable and the risky external-feed change and the destructive cleanup are never entangled in one diff.
 
-### Phase 4 — Freshness (scheduled + manual rebuild)
-**PR: `ci: add scheduled and manual rebuild for Substack freshness`**
+### Phase 4 — Manual rebuild trigger
+**PR: `ci: add manual rebuild trigger for Substack freshness`**
 
-- Add `workflow_dispatch` and a `schedule:` cron (e.g. daily) to `.github/workflows/deploy.yml` so new Substack posts appear without a content code-change.
+- Add `workflow_dispatch` to `.github/workflows/deploy.yml` so I can rebuild and redeploy on demand (after publishing on Substack) without a content code-change. No cron/scheduled trigger.
 - No app-code change.
 
-*Acceptance:* the workflow can be triggered manually from the Actions tab; the scheduled trigger is present and valid; a scheduled/dispatched run rebuilds and redeploys, picking up any new Substack posts.
+*Acceptance:* the workflow can be triggered manually from the Actions tab; a dispatched run rebuilds and redeploys, picking up any new Substack posts.
 
 *Why last:* purely an operational improvement; the feature is already correct and shippable after Phase 3. Kept separate so the CI change is reviewed on its own.
 
@@ -200,5 +199,7 @@ Phase 1 isolates the external-dependency risk with zero UI. Phase 2 switches the
 2. ~~**Section label**~~ **Resolved:** `Writing`.
 3. ~~**Number of posts (N)**~~ **Resolved:** 5, plus a "Show all" link to the Substack archive.
 4. ~~**Old `/blog/<slug>` URLs** — after removal these 404.~~ **Resolved:** 404 is accepted; no holding page or redirect.
-5. **Content parity** — are all 10 existing markdown posts already published on Substack (so nothing is lost by deleting them), or should any be preserved/migrated first?
-6. **Scheduled rebuild cadence** — daily (proposed) vs. more/less frequent, for Phase 4.
+5. ~~**Content parity**~~ **Resolved:** the old markdown posts are deleted outright; nothing to preserve or migrate.
+6. ~~**Scheduled rebuild cadence**~~ **Resolved:** no scheduled rebuild — manual `workflow_dispatch` only.
+
+_All open questions resolved; the PRD is ready for implementation._
