@@ -56,7 +56,7 @@ I now publish my writing on **Substack** instead. I no longer want to maintain w
 
 ### 3.1 Data source
 
-- Feed URL: `https://<publication>.substack.com/feed` (exact publication slug is an open question — see §9). Stored as a single constant/env var (`SUBSTACK_FEED_URL`), not hard-coded in multiple places.
+- Publication: **`mnindrazaka`**. Feed URL: **`https://mnindrazaka.substack.com/feed`**. Stored as a single constant/env var (`SUBSTACK_FEED_URL`), not hard-coded in multiple places. The publication home/archive `https://mnindrazaka.substack.com/archive` is stored alongside it as `SUBSTACK_ARCHIVE_URL` (used by the "Show all" link, §3.2).
 - Fetched **once at build time** in Node.
 - Parsed into a typed list. Each entry:
 
@@ -68,19 +68,20 @@ I now publish my writing on **Substack** instead. I no longer want to maintain w
   | `rawDate` | `item.pubDate` | Kept only for sorting. |
 
 - **Sort** newest-first by `rawDate`.
-- **Limit** to the latest **N** posts (default **N = 5**, a single constant) so the section stays short. Configurable in one place. (Or "show all" — see §9.)
+- **Limit** to the latest **N = 5** posts (a single constant) so the section stays short. A "Show all" link (§3.2) leads to the full archive on Substack.
 
 ### 3.2 UI — the "Blogs" section
 
-- Keep the existing Blogs section in place and in position; only its **data source and link target** change:
-  - Small quiet uppercase section label — keep `Blogs` (or rename, e.g. `Writing` / `Newsletter` — final label is an open question, §9).
-  - Rows built with the existing `LinkListItem`:
+- Keep the section in place and in position; its **label, data source, and link target** change:
+  - Section label: **`Writing`** (replacing `Blogs`), same small quiet uppercase style as the other section labels.
+  - Rows built with the existing `LinkListItem` (the latest 5 posts):
     - **Title** (bold).
     - **Date** underneath, muted.
   - Each row is now a full-width **external** link opening the Substack post in a new tab (`external` → `target="_blank"` + `rel="noopener noreferrer"`), keeping the current min tap height and hover / pressed / focus states.
-- **Empty state:** if there are zero posts (e.g. feed failed at build, see §4), the entire section — label included — is **not rendered**. No error message, no empty box.
+  - **"Show all" link** below the rows: a quiet, muted text link (e.g. "Show all →") pointing to `SUBSTACK_ARCHIVE_URL`, opening the full Substack archive in a new tab (external). Styled as a subtle affordance, not a full `LinkListItem` row, so it reads as a section footer rather than another post.
+- **Empty state:** if there are zero posts (e.g. feed failed at build, see §4), the entire section — label and "Show all" included — is **not rendered**. No error message, no empty box.
 
-The landing page order is unchanged: Hero → Portfolio → Previously Work at → **Blogs** → Social.
+The landing page order is unchanged, with the renamed section: Hero → Portfolio → Previously Work at → **Writing** → Social.
 
 ---
 
@@ -112,7 +113,7 @@ Both are additive changes to `.github/workflows/deploy.yml` and are delivered in
 - **New module:** `src/lib/substack.ts` exporting a `SubstackPost` type and an async `fetchSubstackPosts()` that fetches → parses → sorts → limits, with the §4 error handling built in. Keeping it in `src/lib/` isolates the data plumbing from UI and from the page.
 - **Wiring:** `src/pages/index.tsx` `getStaticProps` calls `fetchSubstackPosts()` and passes the result as the existing `posts` prop into `LandingScreen`. The current `BlogListItem` shape (`{ title, href, date }`) already fits — `href` becomes the Substack URL, and the Blogs rows render as `external`.
 - **Reuse, don't rebuild:** the row UI is the existing `LinkListItem` with `external`; no new row component and no layout change.
-- **Config:** `SUBSTACK_FEED_URL` and the post limit `N` live as named constants (env-overridable for the URL) so they're changed in one place.
+- **Config:** `SUBSTACK_FEED_URL` (`https://mnindrazaka.substack.com/feed`), `SUBSTACK_ARCHIVE_URL` (`https://mnindrazaka.substack.com/archive`), and the post limit `N = 5` live as named constants (env-overridable for the URLs) so they're changed in one place.
 
 ### Cleanup — what the old markdown blog removal deletes
 
@@ -131,7 +132,7 @@ Static export (`output: "export"`) is unaffected throughout — the feed fetch h
 
 ## 7. Success criteria
 
-- The landing page's Blogs section lists the latest N Substack posts, newest-first, each opening the correct Substack URL in a new tab.
+- The landing page's `Writing` section lists the latest 5 Substack posts, newest-first, each opening the correct Substack URL in a new tab, with a "Show all" link to the Substack archive.
 - Row styling, spacing, focus/hover states, and theming are unchanged from today's Blogs rows, in both light and dark.
 - The old markdown blog is gone: `src/contents/`, `/blog/[slug]`, and `BlogDetailScreen` no longer exist; `yarn build` and `yarn lint` pass with no dead imports and no removed-dependency references.
 - With the feed forced to fail (bad URL / offline), `yarn build` **still succeeds** and the Blogs section is simply absent — no crash, no empty box.
@@ -158,11 +159,12 @@ Each phase is a **single, small, reviewable PR**. Every PR leaves `main` shippab
 ### Phase 2 — Point the Blogs section at Substack
 **PR: `feat: source landing blog list from Substack`**
 
-- Change `getStaticProps` in `src/pages/index.tsx` to build `posts` from `fetchSubstackPosts()` instead of local markdown, and render the Blogs rows as `external`.
-- Implement the empty-state rule: render nothing (label included) when the list is empty.
+- Change `getStaticProps` in `src/pages/index.tsx` to build `posts` from `fetchSubstackPosts()` instead of local markdown, and render the rows as `external`.
+- Rename the section label to `Writing` and add the "Show all" link to `SUBSTACK_ARCHIVE_URL` below the rows.
+- Implement the empty-state rule: render nothing (label and "Show all" included) when the list is empty.
 - Leave the old markdown blog files, `/blog/[slug]` route, and `BlogDetailScreen` **in place but now unlinked from the landing page** (they still build). Removal is the next phase.
 
-*Acceptance:* the Blogs section lists the latest N Substack posts newest-first; each row opens the correct Substack URL in a new tab; styling matches today; with the feed forced to fail the build still passes and the section is absent; no client-side Substack request; `yarn build` passes.
+*Acceptance:* the `Writing` section lists the latest 5 Substack posts newest-first; each row opens the correct Substack URL in a new tab; the "Show all" link opens the archive; styling matches today; with the feed forced to fail the build still passes and the section is absent; no client-side Substack request; `yarn build` passes.
 
 *Why second:* the feature goes live in one small, safe diff. Because Phase 1's client never throws, shipping this cannot break a deploy. Keeping the deletion separate makes both PRs easy to review and easy to revert independently.
 
@@ -194,9 +196,9 @@ Phase 1 isolates the external-dependency risk with zero UI. Phase 2 switches the
 
 ## 9. Open questions
 
-1. **Publication slug / feed URL** — the exact `https://<publication>.substack.com/feed` for `SUBSTACK_FEED_URL`.
-2. **Section label** — keep `Blogs`, or rename to `Writing` / `Newsletter` / `Substack`.
-3. **Number of posts (N)** — default proposed is 5; confirm, set another count, or "show all".
+1. ~~**Publication slug / feed URL**~~ **Resolved:** publication `mnindrazaka` → `https://mnindrazaka.substack.com/feed`.
+2. ~~**Section label**~~ **Resolved:** `Writing`.
+3. ~~**Number of posts (N)**~~ **Resolved:** 5, plus a "Show all" link to the Substack archive.
 4. ~~**Old `/blog/<slug>` URLs** — after removal these 404.~~ **Resolved:** 404 is accepted; no holding page or redirect.
 5. **Content parity** — are all 10 existing markdown posts already published on Substack (so nothing is lost by deleting them), or should any be preserved/migrated first?
 6. **Scheduled rebuild cadence** — daily (proposed) vs. more/less frequent, for Phase 4.
