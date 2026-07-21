@@ -1,7 +1,8 @@
 import React from "react";
 import Head from "next/head";
-import { Text, YStack } from "tamagui";
+import { Anchor, Text, YStack } from "tamagui";
 import { useThemeTokens } from "@/theme/useThemeTokens";
+import { SUBSTACK_ARCHIVE_URL } from "@/lib/substack";
 import { HeroSection } from "./HeroSection";
 import { LinkListItem } from "./LinkListItem";
 import { SocialLinks } from "./SocialLinks";
@@ -70,7 +71,7 @@ const workHistoryItems: WorkHistoryItem[] = [
 ];
 
 export function LandingScreen({ posts }: LandingScreenProps) {
-  const { bg, textMuted } = useThemeTokens();
+  const { bg, text, textMuted } = useThemeTokens();
 
   return (
     <>
@@ -159,27 +160,45 @@ export function LandingScreen({ posts }: LandingScreenProps) {
             </YStack>
           </YStack>
 
-          <YStack gap="$3">
-            <Text
-              fontSize={13}
-              fontWeight="700"
-              color={textMuted}
-              textTransform="uppercase"
-              letterSpacing={0.6}
-            >
-              Blogs
-            </Text>
-            <YStack>
-              {posts.map((post) => (
-                <LinkListItem
-                  key={post.href}
-                  title={post.title}
-                  description={post.date}
-                  href={post.href}
-                />
-              ))}
+          {posts.length > 0 && (
+            <YStack gap="$3">
+              <Text
+                fontSize={13}
+                fontWeight="700"
+                color={textMuted}
+                textTransform="uppercase"
+                letterSpacing={0.6}
+              >
+                Writing
+              </Text>
+              <YStack>
+                {posts.map((post) => (
+                  <LinkListItem
+                    key={post.href}
+                    title={post.title}
+                    description={post.date}
+                    href={post.href}
+                    external
+                  />
+                ))}
+              </YStack>
+              <Anchor
+                href={SUBSTACK_ARCHIVE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                textDecorationLine="none"
+                alignSelf="flex-start"
+              >
+                <Text
+                  fontSize={13}
+                  color={textMuted}
+                  hoverStyle={{ color: text }}
+                >
+                  Show all →
+                </Text>
+              </Anchor>
             </YStack>
-          </YStack>
+          )}
 
           <SocialLinks />
         </YStack>
