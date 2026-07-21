@@ -44,7 +44,7 @@ I now publish my writing on **Substack** instead. I no longer want to maintain w
 ### Non-goals
 
 - **Re-hosting or rendering Substack content on this site.** We link out to Substack; we do not build post detail pages here. After this work there is **no** post detail route on the site.
-- Redirecting old `/blog/<slug>` URLs to their Substack equivalents (there is no reliable slug mapping; old URLs simply stop existing — see §8).
+- Redirecting old `/blog/<slug>` URLs to their Substack equivalents. **Decided:** old URLs simply stop existing and 404 — this is accepted (there is no reliable slug mapping).
 - Newsletter signup form, comments, or paywalled-content handling.
 - Search, tags, categories, or filtering of posts.
 - Any client-side/runtime fetching or a serverless proxy.
@@ -197,6 +197,6 @@ Phase 1 isolates the external-dependency risk with zero UI. Phase 2 switches the
 1. **Publication slug / feed URL** — the exact `https://<publication>.substack.com/feed` for `SUBSTACK_FEED_URL`.
 2. **Section label** — keep `Blogs`, or rename to `Writing` / `Newsletter` / `Substack`.
 3. **Number of posts (N)** — default proposed is 5; confirm, set another count, or "show all".
-4. **Old `/blog/<slug>` URLs** — after removal these 404. Acceptable, or do we want a holding page / redirect? (Proposed: accept the 404s; no reliable slug→Substack mapping exists.)
+4. ~~**Old `/blog/<slug>` URLs** — after removal these 404.~~ **Resolved:** 404 is accepted; no holding page or redirect.
 5. **Content parity** — are all 10 existing markdown posts already published on Substack (so nothing is lost by deleting them), or should any be preserved/migrated first?
 6. **Scheduled rebuild cadence** — daily (proposed) vs. more/less frequent, for Phase 4.
