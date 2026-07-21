@@ -10,10 +10,6 @@ const nextConfig = {
     unoptimized: true,
   },
   webpack: function (config) {
-    config.module.rules.push({
-      test: /\.md$/,
-      use: "raw-loader",
-    });
     config.resolve.alias = {
       ...config.resolve.alias,
       "react-native$": "react-native-web",
