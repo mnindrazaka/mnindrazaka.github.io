@@ -1,15 +1,17 @@
-import Parser from "rss-parser";
-
 /**
  * Build-time Substack feed client.
  *
  * Substack has no official API, but every publication exposes a stable RSS
- * feed. We fetch and parse it in Node during `next build` (no CORS, no runtime
- * cost) and surface the latest posts as a typed, sorted, length-capped list.
+ * feed. Fetching that feed directly gets a 403: Substack's Cloudflare edge
+ * blocks the datacenter IP ranges GitHub Actions runners use, regardless of
+ * request headers. So instead we fetch through rss2json.com, a bridge
+ * service that fetches the feed server-side (from its own, non-blocked IPs)
+ * and returns it as JSON — still resolved once at build time in Node, no
+ * client-side/runtime cost.
  *
  * This module never throws: on any failure (network, non-200, timeout,
- * malformed XML) it logs a single warning and returns an empty list, so a
- * flaky feed can never take the build down.
+ * malformed response) it logs a single warning and returns an empty list,
+ * so a flaky feed (or bridge) can never take the build down.
  */
 
 /** A single Substack post, shaped to feed the landing page's `posts` prop. */
@@ -36,8 +38,23 @@ export const SUBSTACK_ARCHIVE_URL =
 /** Maximum number of posts surfaced in the Writing section. */
 export const SUBSTACK_POST_LIMIT = 5;
 
+/** rss2json bridge endpoint (env-overridable). */
+const RSS2JSON_ENDPOINT =
+  process.env.RSS2JSON_ENDPOINT ?? "https://api.rss2json.com/v1/api.json";
+
 /** Time budget for the feed request before we give up and return `[]`. */
 const FETCH_TIMEOUT_MS = 10_000;
+
+type Rss2JsonItem = {
+  title?: string;
+  link?: string;
+  pubDate?: string;
+};
+
+type Rss2JsonResponse = {
+  status?: string;
+  items?: Rss2JsonItem[];
+};
 
 function formatDate(rawDate: string): string {
   return new Date(rawDate).toLocaleDateString(undefined, {
@@ -55,28 +72,26 @@ export async function fetchSubstackPosts(): Promise<SubstackPost[]> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
 
+  const bridgeUrl = new URL(RSS2JSON_ENDPOINT);
+  bridgeUrl.searchParams.set("rss_url", SUBSTACK_FEED_URL);
+  if (process.env.RSS2JSON_API_KEY) {
+    bridgeUrl.searchParams.set("api_key", process.env.RSS2JSON_API_KEY);
+  }
+
   try {
-    const response = await fetch(SUBSTACK_FEED_URL, {
+    const response = await fetch(bridgeUrl.toString(), {
       signal: controller.signal,
-      headers: {
-        // Substack's Cloudflare edge 403s requests that identify as a bot
-        // (no User-Agent, or one that declares itself as such, e.g.
-        // "compatible; ..."). Sending a real browser UA + Accept-Language
-        // gets past the bot check.
-        "User-Agent":
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
-        Accept:
-          "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-        "Accept-Language": "en-US,en;q=0.9",
-      },
     });
 
     if (!response.ok) {
-      throw new Error(`Feed responded with status ${response.status}`);
+      throw new Error(`Feed bridge responded with status ${response.status}`);
     }
 
-    const xml = await response.text();
-    const feed = await new Parser().parseString(xml);
+    const feed: Rss2JsonResponse = await response.json();
+
+    if (feed.status !== "ok") {
+      throw new Error(`Feed bridge returned status "${feed.status}"`);
+    }
 
     return (feed.items ?? [])
       .filter((item) => item.title && item.link && item.pubDate)

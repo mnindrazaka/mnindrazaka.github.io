@@ -29,7 +29,6 @@
     "react-native-svg": "^15.9.0",
     "react-native-svg-web": "^1.0.9",
     "react-native-web": "^0.19.4",
-    "rss-parser": "^3.13.0",
     "tamagui": "^1.117.1",
     "typescript": "5.0.4",
     "webpack": "^5.96.1"
