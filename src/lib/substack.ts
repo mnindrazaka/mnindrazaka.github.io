@@ -59,11 +59,15 @@ export async function fetchSubstackPosts(): Promise<SubstackPost[]> {
     const response = await fetch(SUBSTACK_FEED_URL, {
       signal: controller.signal,
       headers: {
-        // Substack's edge (Cloudflare) 403s requests without a browser-like
-        // User-Agent, which Node's default fetch doesn't send.
+        // Substack's Cloudflare edge 403s requests that identify as a bot
+        // (no User-Agent, or one that declares itself as such, e.g.
+        // "compatible; ..."). Sending a real browser UA + Accept-Language
+        // gets past the bot check.
         "User-Agent":
-          "Mozilla/5.0 (compatible; mnindrazaka.github.io build; +https://mnindrazaka.github.io)",
-        Accept: "application/rss+xml, application/xml, text/xml, */*",
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+        Accept:
+          "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
       },
     });
 
