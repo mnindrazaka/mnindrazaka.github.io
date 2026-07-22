@@ -38,6 +38,13 @@ const portfolioItems: PortfolioItem[] = [
     href: "https://gatherloop.github.io/gatherloop-pos",
     external: true,
   },
+  {
+    title: "Game Master Bell",
+    description:
+      "App for calling game masters in board game cafes",
+    href: "https://gatherloop.github.io/game-master-bell/docs",
+    external: true,
+  },
 ];
 
 type WorkHistoryItem = {
