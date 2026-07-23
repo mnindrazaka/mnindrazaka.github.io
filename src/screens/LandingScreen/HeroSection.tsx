@@ -60,8 +60,7 @@ export function HeroSection() {
           textAlign="center"
           maxWidth={420}
         >
-          I build products end-to-end, from software to business. Founder of
-          Gatherloop, open to remote opportunities.
+          Software Engineer by profession, board game cafe owner by passion. I write about software engineering, entrepreneurship, and the lessons I learn from building products
         </Text>
       </YStack>
     </YStack>
