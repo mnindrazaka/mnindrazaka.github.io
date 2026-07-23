@@ -33,7 +33,7 @@ const portfolioItems: PortfolioItem[] = [
     external: true,
   },
   {
-    title: "Point of Sale",
+    title: "Point of Sale System",
     description: "POS built in-house to run Gatherloop's daily operations",
     href: "https://gatherloop.github.io/gatherloop-pos",
     external: true,
@@ -53,7 +53,6 @@ type WorkHistoryItem = {
   href: string;
 };
 
-// TODO: placeholder data — replace with real company history (PRD §8.5).
 const workHistoryItems: WorkHistoryItem[] = [
   {
     company: "ADPList",
