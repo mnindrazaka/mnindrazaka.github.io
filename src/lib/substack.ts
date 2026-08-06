@@ -1,23 +1,30 @@
 /**
  * Build-time Substack feed client.
  *
- * Substack has no official API, but every publication exposes a stable RSS
- * feed. Fetching that feed directly gets a 403: Substack's Cloudflare edge
- * blocks datacenter IP ranges (GitHub Actions runners among them), regardless
- * of request headers. We previously routed around this through a single
- * bridge service (rss2json.com) that fetched the feed server-side from its
- * own IPs — but Substack has since started blocking that bridge's IPs too.
- * Since this is IP/ASN-reputation blocking rather than anything specific to
- * one bridge, any single third-party fetcher can go the same way at any
- * time. So instead of depending on one bridge, we try a short list of
- * independent strategies in order (a direct fetch, then a couple of
- * unrelated proxy services) and use the first one that succeeds. Losing any
- * one of them degrades resilience rather than breaking the build outright.
+ * Substack has no *documented* API, but the publication frontend itself
+ * calls an internal JSON endpoint (`/api/v1/posts`) to render the archive
+ * page, and every publication also exposes a stable RSS feed at `/feed`.
+ * Fetching either directly gets a 403 from Substack's Cloudflare edge: it
+ * blocks datacenter IP ranges (GitHub Actions runners among them),
+ * regardless of request headers or which path is requested. We previously
+ * routed around this through a single bridge service (rss2json.com) that
+ * fetched the RSS feed server-side from its own IPs — but Substack has
+ * since started blocking that bridge's IPs too.
  *
- * This module never throws: if every strategy fails (network, non-200,
- * timeout, malformed response) it logs a single warning and returns an
- * empty list, so a flaky feed (or every bridge at once) can never take the
- * build down.
+ * Since this is IP/ASN-reputation blocking rather than anything specific to
+ * one path or one bridge, no single source is safe to depend on alone. So
+ * instead we try a short list of independent strategies, in order, and use
+ * whichever succeeds first:
+ *
+ *   1. The JSON API, fetched directly.
+ *   2. The JSON API, fetched through a couple of unrelated proxy services.
+ *   3. The RSS feed, fetched directly.
+ *   4. The RSS feed, through rss2json, then through the same proxies.
+ *
+ * Losing any one source or bridge degrades resilience rather than breaking
+ * the build outright, and this module never throws: if every strategy
+ * fails (network, non-200, timeout, malformed response) it logs a single
+ * warning and returns an empty list.
  */
 
 /** A single Substack post, shaped to feed the landing page's `posts` prop. */
@@ -32,7 +39,7 @@ export type SubstackPost = {
   rawDate: string;
 };
 
-/** A raw feed entry, before formatting/filtering. */
+/** A raw feed/API entry, before formatting/filtering. */
 type FeedItem = {
   title?: string;
   link?: string;
@@ -51,6 +58,11 @@ export const SUBSTACK_ARCHIVE_URL =
 /** Maximum number of posts surfaced in the Writing section. */
 export const SUBSTACK_POST_LIMIT = 5;
 
+/** Substack's internal posts API, same one the publication frontend calls. */
+const SUBSTACK_API_URL =
+  process.env.SUBSTACK_API_URL ??
+  `${new URL(SUBSTACK_FEED_URL).origin}/api/v1/posts?limit=${SUBSTACK_POST_LIMIT}`;
+
 /** rss2json bridge endpoint (env-overridable). */
 const RSS2JSON_ENDPOINT =
   process.env.RSS2JSON_ENDPOINT ?? "https://api.rss2json.com/v1/api.json";
@@ -58,17 +70,45 @@ const RSS2JSON_ENDPOINT =
 /** Time budget per strategy attempt before moving on to the next one. */
 const FETCH_TIMEOUT_MS = 10_000;
 
-async function fetchWithTimeout(
-  url: string,
-  init?: RequestInit
-): Promise<Response> {
+async function fetchText(url: string): Promise<string> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
   try {
-    return await fetch(url, { ...init, signal: controller.signal });
+    const response = await fetch(url, { signal: controller.signal });
+    if (!response.ok) {
+      throw new Error(`responded with status ${response.status}`);
+    }
+    return await response.text();
   } finally {
     clearTimeout(timeout);
   }
+}
+
+type Parser = (raw: string) => FeedItem[];
+
+/** Fetch a URL directly. Works whenever the caller's IP isn't blocked. */
+function fetchDirect(url: string, parse: Parser): () => Promise<FeedItem[]> {
+  return async () => parse(await fetchText(url));
+}
+
+/** Fetch a URL through AllOrigins, a generic open-source CORS/fetch proxy. */
+function fetchViaAllOrigins(
+  url: string,
+  parse: Parser
+): () => Promise<FeedItem[]> {
+  return async () =>
+    parse(
+      await fetchText(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`)
+    );
+}
+
+/** Fetch a URL through corsproxy.io, another independently-run proxy. */
+function fetchViaCorsProxy(
+  url: string,
+  parse: Parser
+): () => Promise<FeedItem[]> {
+  return async () =>
+    parse(await fetchText(`https://corsproxy.io/?url=${encodeURIComponent(url)}`));
 }
 
 /**
@@ -106,21 +146,36 @@ function decodeXmlEntities(text: string): string {
     .replace(/&amp;/g, "&");
 }
 
+/** A post as returned by Substack's internal `/api/v1/posts` endpoint. */
+type SubstackApiPost = {
+  title?: string;
+  canonical_url?: string;
+  post_date?: string;
+};
+
+/**
+ * Parse the response body of `/api/v1/posts`. Normally a bare JSON array;
+ * tolerate a `{ posts: [...] }` wrapper too in case the shape changes.
+ */
+function parseApiItems(json: string): FeedItem[] {
+  const parsed: unknown = JSON.parse(json);
+  const posts: SubstackApiPost[] = Array.isArray(parsed)
+    ? parsed
+    : ((parsed as { posts?: SubstackApiPost[] })?.posts ?? []);
+
+  return posts.map((post) => ({
+    title: post.title,
+    link: post.canonical_url,
+    pubDate: post.post_date,
+  }));
+}
+
 type Rss2JsonResponse = {
   status?: string;
   items?: FeedItem[];
 };
 
-/** Fetch the feed directly. Works whenever the caller's IP isn't blocked. */
-async function fetchDirect(): Promise<FeedItem[]> {
-  const response = await fetchWithTimeout(SUBSTACK_FEED_URL);
-  if (!response.ok) {
-    throw new Error(`Direct fetch responded with status ${response.status}`);
-  }
-  return parseRssItems(await response.text());
-}
-
-/** Fetch through the rss2json bridge, which resolves the feed server-side. */
+/** Fetch the RSS feed through the rss2json bridge. */
 async function fetchViaRss2Json(): Promise<FeedItem[]> {
   const bridgeUrl = new URL(RSS2JSON_ENDPOINT);
   bridgeUrl.searchParams.set("rss_url", SUBSTACK_FEED_URL);
@@ -128,12 +183,9 @@ async function fetchViaRss2Json(): Promise<FeedItem[]> {
     bridgeUrl.searchParams.set("api_key", process.env.RSS2JSON_API_KEY);
   }
 
-  const response = await fetchWithTimeout(bridgeUrl.toString());
-  if (!response.ok) {
-    throw new Error(`rss2json responded with status ${response.status}`);
-  }
-
-  const feed: Rss2JsonResponse = await response.json();
+  const feed: Rss2JsonResponse = JSON.parse(
+    await fetchText(bridgeUrl.toString())
+  );
   if (feed.status !== "ok") {
     throw new Error(`rss2json returned status "${feed.status}"`);
   }
@@ -141,39 +193,31 @@ async function fetchViaRss2Json(): Promise<FeedItem[]> {
   return feed.items ?? [];
 }
 
-/** Fetch through AllOrigins, a generic open-source CORS/fetch proxy. */
-async function fetchViaAllOrigins(): Promise<FeedItem[]> {
-  const bridgeUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(
-    SUBSTACK_FEED_URL
-  )}`;
-  const response = await fetchWithTimeout(bridgeUrl);
-  if (!response.ok) {
-    throw new Error(`AllOrigins responded with status ${response.status}`);
-  }
-  return parseRssItems(await response.text());
-}
-
-/** Fetch through corsproxy.io, another generic, independently-run proxy. */
-async function fetchViaCorsProxy(): Promise<FeedItem[]> {
-  const bridgeUrl = `https://corsproxy.io/?url=${encodeURIComponent(
-    SUBSTACK_FEED_URL
-  )}`;
-  const response = await fetchWithTimeout(bridgeUrl);
-  if (!response.ok) {
-    throw new Error(`corsproxy.io responded with status ${response.status}`);
-  }
-  return parseRssItems(await response.text());
-}
-
 /**
  * Strategies are tried in order; the first to return a non-empty item list
- * wins. Ordered roughly cheapest/most-direct first.
+ * wins. The JSON API goes first (it's the richer, purpose-built source);
+ * the RSS feed is the fallback tier in case the API endpoint ever changes.
  */
 const FEED_STRATEGIES: { name: string; run: () => Promise<FeedItem[]> }[] = [
-  { name: "direct", run: fetchDirect },
-  { name: "rss2json", run: fetchViaRss2Json },
-  { name: "allorigins", run: fetchViaAllOrigins },
-  { name: "corsproxy.io", run: fetchViaCorsProxy },
+  { name: "api-direct", run: fetchDirect(SUBSTACK_API_URL, parseApiItems) },
+  {
+    name: "api-via-allorigins",
+    run: fetchViaAllOrigins(SUBSTACK_API_URL, parseApiItems),
+  },
+  {
+    name: "api-via-corsproxy",
+    run: fetchViaCorsProxy(SUBSTACK_API_URL, parseApiItems),
+  },
+  { name: "rss-direct", run: fetchDirect(SUBSTACK_FEED_URL, parseRssItems) },
+  { name: "rss-via-rss2json", run: fetchViaRss2Json },
+  {
+    name: "rss-via-allorigins",
+    run: fetchViaAllOrigins(SUBSTACK_FEED_URL, parseRssItems),
+  },
+  {
+    name: "rss-via-corsproxy",
+    run: fetchViaCorsProxy(SUBSTACK_FEED_URL, parseRssItems),
+  },
 ];
 
 function formatDate(rawDate: string): string {
@@ -201,10 +245,9 @@ function toSubstackPosts(items: FeedItem[]): SubstackPost[] {
 }
 
 /**
- * Fetch the Substack feed, parse it, sort newest-first and cap to the latest
- * {@link SUBSTACK_POST_LIMIT} posts. Tries each strategy in
- * {@link FEED_STRATEGIES} until one succeeds. Never throws — returns `[]`
- * if every strategy fails.
+ * Fetch the latest Substack posts, sort newest-first and cap to
+ * {@link SUBSTACK_POST_LIMIT}. Tries each strategy in {@link FEED_STRATEGIES}
+ * until one succeeds. Never throws — returns `[]` if every strategy fails.
  */
 export async function fetchSubstackPosts(): Promise<SubstackPost[]> {
   const errors: string[] = [];
@@ -225,7 +268,7 @@ export async function fetchSubstackPosts(): Promise<SubstackPost[]> {
   }
 
   console.warn(
-    `[substack] Could not load feed from ${SUBSTACK_FEED_URL} via any strategy; rendering an empty Writing section.`,
+    `[substack] Could not load posts from ${SUBSTACK_FEED_URL} via any strategy; rendering an empty Writing section.`,
     errors
   );
   return [];
