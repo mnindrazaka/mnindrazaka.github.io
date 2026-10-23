@@ -1,94 +1,119 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
+import { motion } from "motion/react";
 import { Button } from "#/components/ui/button";
+import { getProjectBySlug } from "#/data/project";
 
 export const Route = createFileRoute("/projects/$slug")({
 	component: RouteComponent,
+	loader: async ({ params }) => ({
+		project: await getProjectBySlug(params.slug),
+	}),
 });
 
 function RouteComponent() {
+	const { project } = Route.useLoaderData();
 	return (
-		<div className="flex justify-center pt-10 p-4">
-			<div className="container flex flex-col justify-center gap-8">
-				<div className="max-w-4xl flex flex-col gap-3">
+		<div className="flex flex-col justify-center pt-10 p-4">
+			<div className="flex flex-col sm:flex-row min-h-screen gap-12">
+				<div
+					className={`flex-1 p-4 bg-cover bg-center rounded-lg`}
+					style={{ backgroundImage: `url('${project.imageUrl}')` }}
+				></div>
+
+				<div className="flex-1 flex flex-col gap-2 bg-background">
 					<Link to="/" className="flex gap-2 items-center" href="/">
 						<ArrowLeft size="20px" />
 						<p>Back to Home</p>
 					</Link>
-
-					<h1 className="text-4xl font-bold">Point Of Sale System</h1>
-
-					<div className="border"></div>
-
-					<div className="flex gap-3">
-						<Button size="sm">Live Project</Button>
-						<Button size="sm" variant="secondary">
-							View Code
-						</Button>
+					<motion.h2
+						className="text-2xl text-yellow-500 flex items-center gap-2"
+						initial={{ opacity: 0, y: 20 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.4, ease: "easeOut" }}
+						viewport={{ once: true }}
+					>
+						{project.year}
+					</motion.h2>
+					<motion.h1
+						className="text-5xl font-bold max-w-lg"
+						initial={{ opacity: 0, y: 20 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.4, ease: "easeOut" }}
+						viewport={{ once: true }}
+					>
+						{project.title}
+					</motion.h1>
+					<motion.p
+						className="text-xl max-w-md"
+						initial={{ opacity: 0, y: 20 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.4, ease: "easeOut" }}
+						viewport={{ once: true }}
+					>
+						{project.description}
+					</motion.p>
+					<div className="flex flex-col self-stretch sm:flex-row gap-3 mt-5 mb-5">
+						<motion.div
+							initial={{ opacity: 0, y: 20 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							transition={{ duration: 0.4, ease: "easeOut" }}
+							viewport={{ once: true }}
+						>
+							<Button>View Code</Button>
+						</motion.div>
+						<motion.div
+							initial={{ opacity: 0, y: 20 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							transition={{ duration: 0.4, ease: "easeOut" }}
+							viewport={{ once: true }}
+						>
+							<Button variant="secondary">View Live Demo</Button>
+						</motion.div>
 					</div>
 
-					<p>
-						A point of sale system designed for coffee shop, help business owner
-						managing sales, inventory, expenses, and statistics
-					</p>
-				</div>
+					<div className="max-w-lg flex flex-col gap-3">
+						<h1 className="font-bold text-2xl">PROBLEM</h1>
+						<div className="border"></div>
+						<p className="text-lg">{project.problem}</p>
+					</div>
 
-				<div className="flex flex-col lg:flex-row gap-5">
-					<img
-						className="rounded-lg w-full max-w-full lg:max-w-xs"
-						src="https://picsum.photos/300/200"
-						alt=""
-					/>
-					<img
-						className="rounded-lg w-full max-w-full lg:max-w-xs"
-						src="https://picsum.photos/300/200"
-						alt=""
-					/>
-					<img
-						className="rounded-lg w-full max-w-full lg:max-w-xs"
-						src="https://picsum.photos/300/200"
-						alt=""
-					/>
-				</div>
-				<div className="max-w-4xl flex flex-col gap-3">
-					<h1 className="font-bold text-2xl">Problems</h1>
-					<div className="border"></div>
-					<p>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-						eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-						ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-						aliquip ex ea commodo consequat. Duis aute irure dolor in
-						reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-						pariatur
-					</p>
-				</div>
+					<div className="max-w-lg flex flex-col gap-3">
+						<h1 className="font-bold text-2xl">SOLUTION</h1>
+						<div className="border"></div>
 
-				<div className="max-w-4xl flex flex-col gap-3">
-					<h1 className="font-bold text-2xl">Solution</h1>
-					<div className="border"></div>
+						<p className="text-lg">{project.solution}</p>
+					</div>
 
-					<p>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-						eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-						ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-						aliquip ex ea commodo consequat. Duis aute irure dolor in
-						reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-						pariatur
-					</p>
+					<div className="max-w-lg flex flex-col gap-3">
+						<h1 className="font-bold text-2xl">OUTCOME</h1>
+						<div className="border"></div>
+						<p className="text-lg">{project.outcome}</p>
+					</div>
 				</div>
+			</div>
 
-				<div className="max-w-4xl flex flex-col gap-3">
-					<h1 className="font-bold text-2xl">Outcome</h1>
-					<div className="border"></div>
-					<p>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-						eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-						ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-						aliquip ex ea commodo consequat. Duis aute irure dolor in
-						reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-						pariatur
-					</p>
-				</div>
+			<div className="max-w-lg flex flex-col gap-3 mt-12 mb-5">
+				<h1 className="font-bold text-2xl">SCREENSHOT</h1>
+				<div className="border"></div>
+			</div>
+
+			<div className="flex flex-col lg:flex-row gap-5">
+				<img
+					className="rounded-lg w-full max-w-full lg:max-w-xs"
+					src="https://picsum.photos/300/200"
+					alt=""
+				/>
+				<img
+					className="rounded-lg w-full max-w-full lg:max-w-xs"
+					src="https://picsum.photos/300/200"
+					alt=""
+				/>
+				<img
+					className="rounded-lg w-full max-w-full lg:max-w-xs"
+					src="https://picsum.photos/300/200"
+					alt=""
+				/>
 			</div>
 		</div>
 	);

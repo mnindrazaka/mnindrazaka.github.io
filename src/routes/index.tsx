@@ -1,14 +1,20 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Hand, Mail } from "lucide-react";
 import { motion, type Variants } from "motion/react";
-import { useEffect, useState } from "react";
 import { LinkedinIcon } from "#/components/icons/lucide-linkedin";
 import { Badge } from "#/components/ui/badge";
 import { Button } from "#/components/ui/button";
-import { Skeleton } from "#/components/ui/skeleton";
+import { getExperiences } from "#/data/experience";
+import { getNotes } from "#/data/note";
+import { getProjects } from "#/data/project";
 
 export const Route = createFileRoute("/")({
 	component: App,
+	loader: async () => ({
+		notes: await getNotes(),
+		projects: await getProjects(),
+		experiences: await getExperiences(),
+	}),
 });
 
 const staggerContainer: Variants = {
@@ -35,124 +41,8 @@ const fadeUp: Variants = {
 	},
 };
 
-type Experience = {
-	id: number;
-	start: number;
-	end?: number;
-	role: string;
-	company: string;
-	description: string;
-};
-
-const experiences: Experience[] = [
-	{
-		id: 1,
-		start: 2025,
-		end: 2026,
-		role: "Fullstack Engineer",
-		company: "ADPList",
-		description:
-			"Developed ADPList mentoring platform across frontend and backend. Migrated backend services from Django on EC2 to Node.js serverless functions.",
-	},
-	{
-		id: 2,
-		start: 2023,
-		end: 2024,
-		role: "Lead Frontend Engineer",
-		company: "KarirLab",
-		description:
-			"Led a frontend team building recruitment products, including resume builder, job application tracking, candidate filtering, and payment subscriptions. Contributed to technical planning, architecture decisions, and cross-team delivery",
-	},
-	{
-		id: 3,
-		start: 2021,
-		end: 2023,
-		role: "Frontend Engineer",
-		company: "Ruangguru",
-		description:
-			"Developed Skill Academy, an online course platform, optimizing web performance and SEO. Built a cross-platform design system enabling code sharing between web and mobile applications",
-	},
-	{
-		id: 4,
-		start: 2020,
-		role: "Frontend Engineer",
-		company: "Feedloop",
-		description:
-			"Built Kanvas, a no-code platform for creating microsites. Developed a drag-and-drop visual editor using HTML Canvas, enabling users to create campaigns without engineering assistance",
-	},
-];
-
-type Project = {
-	title: string;
-	slug: string;
-	year: number;
-	description: string;
-	imageUrl: string;
-};
-
-const projects: Project[] = [
-	{
-		title: "Point of Sale System",
-		slug: "pos",
-		year: 2024,
-		description:
-			"A point of sale system designed for coffee shop, help business owner managing sales, inventory, expenses, and statistics",
-		imageUrl:
-			"https://images.unsplash.com/photo-1728044849291-69f90d443aea?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D",
-	},
-	{
-		title: "Board Game Play Time Tracker",
-		slug: "bg-time-tracker",
-		year: 2025,
-		description:
-			"RFID based system to track customer play time and convert it to price",
-		imageUrl:
-			"https://images.unsplash.com/photo-1763875018525-1d39fe1a4354?q=80&w=2370&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D",
-	},
-	{
-		title: "Inventory Management System",
-		slug: "inventory",
-		year: 2026,
-		description:
-			"A system to manage and track the stock of raw material in coffee shop",
-		imageUrl:
-			"https://images.unsplash.com/photo-1587293852726-70cdb56c2866?q=80&w=2372&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D",
-	},
-	{
-		title: "Table Ordering System",
-		slug: "table-ordering",
-		year: 2026,
-		description:
-			"A web based application that allow customer to order menu without leaving their table. Fully integrated with the POS system. Increase sales for the coffee shop",
-		imageUrl:
-			"https://images.unsplash.com/photo-1709719263375-a8642532161d?q=80&w=2216&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D",
-	},
-];
-
-type Article = {
-	guid: string;
-	author: string;
-	content: string;
-	description: string;
-	link: string;
-	pubDate: string;
-	thumbnail: string;
-	title: string;
-};
-
 function App() {
-	const [isArticleLoading, setIsArticleLoading] = useState(true);
-	const [articles, setArticles] = useState<Article[]>([]);
-	useEffect(() => {
-		setIsArticleLoading(true);
-		fetch(
-			"https://api.rss2json.com/v1/api.json?rss_url=https://mnindrazaka.substack.com/feed&api_key=yo2kpldwbqueg1fnmgetuyv0czz5odjskwvxlb7g",
-		)
-			.then((res) => res.json())
-			.then((data) => setArticles(data.items))
-			.finally(() => setIsArticleLoading(false));
-	}, []);
-
+	const { notes, projects, experiences } = Route.useLoaderData();
 	return (
 		<div>
 			<div className="flex flex-col sm:flex-row p-4 h-screen gap-12">
@@ -261,7 +151,15 @@ function App() {
 								</div>
 
 								<div className="flex-1 flex flex-col gap-3">
-									<p className="text-md text-yellow-500">{project.year}</p>
+									<motion.p
+										initial={{ opacity: 0, y: 20 }}
+										whileInView={{ opacity: 1, y: 0 }}
+										transition={{ duration: 0.4, ease: "easeOut" }}
+										viewport={{ once: true }}
+										className="text-md text-yellow-500"
+									>
+										{project.year}
+									</motion.p>
 									<motion.h1
 										className="text-4xl md:text-5xl font-bold"
 										initial={{ opacity: 0, y: 20 }}
@@ -286,7 +184,7 @@ function App() {
 										transition={{ duration: 0.4, ease: "easeOut" }}
 										viewport={{ once: true }}
 									>
-										<Link to="/projects/$slug" params={{ slug: "pos" }}>
+										<Link to="/projects/$slug" params={{ slug: project.slug }}>
 											<Button className="self-start mt-5">View Project</Button>
 										</Link>
 									</motion.div>
@@ -476,66 +374,40 @@ function App() {
 							</motion.p>
 						</div>
 
-						{isArticleLoading ? (
-							<motion.div
-								key="loading"
-								className="flex gap-10 flex-wrap"
-								variants={staggerContainer}
-								initial="hidden"
-								whileInView="visible"
-								viewport={{ once: true, amount: 0.15 }}
-							>
-								{Array.from({ length: 4 }, (_, i) => i).map((key) => (
-									<motion.div
-										key={key}
-										variants={fadeUp}
-										className="basis-[100%] sm:basis-[45%] md:basis-[29%] lg:basis-[20%]"
-									>
-										<Skeleton className="w-full aspect-video rounded-lg mb-5" />
-										<Skeleton className="h-6 w-3/4 mb-2" />
-										<Skeleton className="h-4 w-full mb-2" />
-										<Skeleton className="h-4 w-2/3" />
-									</motion.div>
-								))}
-							</motion.div>
-						) : (
-							<motion.div
-								key="loaded"
-								className="flex gap-10 flex-wrap"
-								variants={staggerContainer}
-								initial="hidden"
-								whileInView="visible"
-								viewport={{ once: true, amount: 0.15 }}
-							>
-								{articles.map((article) => (
-									<motion.a
-										key={article.guid}
-										href={article.link}
-										variants={fadeUp}
-										whileHover={{ y: -3 }}
-										whileTap={{ scale: 0.99 }}
-										transition={{ duration: 0.2 }}
-										className="basis-[100%] sm:basis-[45%] md:basis-[29%] lg:basis-[20%] flex flex-col justify-between"
-										viewport={{ once: true }}
-									>
-										<div>
-											<img
-												src={article.thumbnail}
-												alt=""
-												className="rounded-lg mb-5 w-full aspect-video object-cover max-w-full sm:max-w-xs"
-											/>
-											<h1 className="text-xl font-bold">{article.title}</h1>
-											<p className="text-gray-400 text-sm">
-												{article.description}
-											</p>
-											<p className="text-xs mt-3">{article.pubDate}</p>
-										</div>
+						<motion.div
+							key="loaded"
+							className="flex gap-10 flex-wrap"
+							variants={staggerContainer}
+							initial="hidden"
+							whileInView="visible"
+							viewport={{ once: true, amount: 0.15 }}
+						>
+							{notes.map((note) => (
+								<motion.a
+									key={note.guid}
+									href={note.link}
+									variants={fadeUp}
+									whileHover={{ y: -3 }}
+									whileTap={{ scale: 0.99 }}
+									transition={{ duration: 0.2 }}
+									className="basis-[100%] sm:basis-[45%] md:basis-[29%] lg:basis-[20%] flex flex-col justify-between"
+									viewport={{ once: true }}
+								>
+									<div>
+										<img
+											src={note.enclosure.link}
+											alt=""
+											className="rounded-lg mb-5 w-full aspect-video object-cover max-w-full sm:max-w-xs"
+										/>
+										<h1 className="text-xl font-bold">{note.title}</h1>
+										<p className="text-gray-400 text-sm">{note.description}</p>
+										<p className="text-xs mt-3">{note.pubDate}</p>
+									</div>
 
-										<Button className="mt-5">Read More</Button>
-									</motion.a>
-								))}
-							</motion.div>
-						)}
+									<Button className="mt-5">Read More</Button>
+								</motion.a>
+							))}
+						</motion.div>
 					</div>
 				</div>
 			</div>
