@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { motion } from "motion/react";
+import { Badge } from "#/components/ui/badge";
 import { Button } from "#/components/ui/button";
 import { getProjectBySlug } from "#/data/project";
 
@@ -91,6 +92,28 @@ function RouteComponent() {
 						<p className="text-lg">{project.outcome}</p>
 					</div>
 				</div>
+			</div>
+
+			<div className="max-w-lg flex flex-col gap-3 mt-12 mb-5">
+				<h1 className="font-bold text-2xl">PLATFORM</h1>
+				<div className="border"></div>
+			</div>
+
+			<div className="flex flex-col lg:flex-row gap-3">
+				{project.platforms.map((platform) => (
+					<Badge key={platform}>{platform}</Badge>
+				))}
+			</div>
+
+			<div className="max-w-lg flex flex-col gap-3 mt-12 mb-5">
+				<h1 className="font-bold text-2xl">TECH STACK</h1>
+				<div className="border"></div>
+			</div>
+
+			<div className="flex flex-col lg:flex-row gap-3">
+				{project.techStacks.map((techStack) => (
+					<Badge key={techStack}>{techStack}</Badge>
+				))}
 			</div>
 
 			<div className="max-w-lg flex flex-col gap-3 mt-12 mb-5">

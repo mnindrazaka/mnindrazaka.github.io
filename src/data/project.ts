@@ -7,6 +7,8 @@ type Project = {
 	problem: string;
 	solution: string;
 	outcome: string;
+	techStacks: string[];
+	platforms: string[];
 };
 
 const projects: Project[] = [
@@ -24,6 +26,8 @@ const projects: Project[] = [
 			"Built a custom POS system to manage products and customer transactions, implementing server-side pagination and filtering to improve data retrieval and handling.",
 		outcome:
 			"Improved system responsiveness and navigation, making transaction lookup and customer record management faster and more efficient.",
+		techStacks: ["React", "React Native", "Next.js", "Typescript", "Golang"],
+		platforms: ["Web", "Mobile"],
 	},
 	{
 		title: "Board Game Play Time Tracker",
@@ -39,6 +43,8 @@ const projects: Project[] = [
 			"Developed an RFID-based play time tracking system that records customers’ check-in times when they scan their tickets and automatically calculates the total play time and charges when they check out.",
 		outcome:
 			"Streamlined the checkout process by eliminating manual time tracking and price calculations, allowing game masters to serve customers more efficiently.",
+		techStacks: ["React", "React Native", "Next.js", "Typescript", "Golang"],
+		platforms: ["Web", "Mobile"],
 	},
 	{
 		title: "Inventory Management System",
@@ -54,6 +60,8 @@ const projects: Project[] = [
 			"Developed an inventory management feature within the POS system to support weekly stock checks and automatically calculate the required purchase quantities for each raw material based on current stock levels.",
 		outcome:
 			"Streamlined weekly inventory checks and reduced the time and manual effort required to prepare purchase lists.",
+		techStacks: ["React", "React Native", "Next.js", "Typescript", "Golang"],
+		platforms: ["Web", "Mobile"],
 	},
 	{
 		title: "Table Ordering System",
@@ -69,6 +77,8 @@ const projects: Project[] = [
 			"Developed a QR code-based table ordering system that allows customers to browse the menu and place orders directly from their tables. Customers receive notifications on their phones when their orders are ready for pickup at the cashier.",
 		outcome:
 			"Improved ordering convenience by reducing the effort required to place orders, creating a smoother customer experience and opportunities for additional sales.",
+		techStacks: ["React", "Next.js", "Typescript", "Golang"],
+		platforms: ["Web"],
 	},
 ];
 
