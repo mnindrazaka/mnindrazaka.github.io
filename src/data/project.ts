@@ -33,8 +33,7 @@ const projects: Project[] = [
 		year: 2024,
 		description:
 			"A point of sale system designed to help staff manage product, sales, and expenses in a coffee shop",
-		imageUrl:
-			"https://images.unsplash.com/photo-1602665742701-389671bc40c0?q=80&w=1335&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D",
+		imageUrl: "/pos/hero.png",
 		problem:
 			"Founded in 2023, Gatherloop Coffee Shop initially used Coda to manage customer transactions. As transaction records grew, the system became increasingly slow because it fetched all records at once and relied on client-side pagination",
 		solution:
@@ -173,8 +172,7 @@ const projects: Project[] = [
 		year: 2026,
 		description:
 			"A system to manage and track stock of raw material so coffee shop staff can know when and what to purchase",
-		imageUrl:
-			"https://images.unsplash.com/photo-1587293852726-70cdb56c2866?q=80&w=2372&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D",
+		imageUrl: "/inventory/hero.png",
 		problem:
 			"Weekly inventory checks required staff to manually inspect stock levels and determine how much of each raw material to purchase. Reviewing items one by one made the process time-consuming and inefficient.",
 		solution:
