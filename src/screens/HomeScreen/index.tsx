@@ -7,6 +7,7 @@ import { ExperienceSection } from "./ExperienceSection";
 import { HeroSection } from "./HeroSection";
 import { NoteSection } from "./NoteSection";
 import { ProjectSection } from "./ProjectSection";
+import { ServiceSection } from "./ServiceSection";
 
 export type HomeScreenProps = {
 	projects: Project[];
@@ -18,6 +19,7 @@ export function HomeScreen({ projects, experiences, notes }: HomeScreenProps) {
 	return (
 		<div>
 			<HeroSection />
+			<ServiceSection />
 			<ProjectSection projects={projects} />
 			<AboutSection />
 			<ExperienceSection experiences={experiences} />

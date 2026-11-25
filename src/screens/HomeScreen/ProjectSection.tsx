@@ -13,8 +13,6 @@ export function ProjectSection({ projects }: ProjectSectionProps) {
 		<div className="flex justify-center mt-10">
 			<div className="container">
 				<div className="flex flex-col gap-20 p-4">
-					<div className="border"></div>
-
 					<div className="flex flex-col justify-center items-center gap-3">
 						<motion.p
 							initial={{ opacity: 0, y: 20 }}
@@ -23,7 +21,7 @@ export function ProjectSection({ projects }: ProjectSectionProps) {
 							viewport={{ once: true }}
 							className="text-yellow-500 text-2xl"
 						>
-							Project
+							Projects
 						</motion.p>
 
 						<motion.h1
