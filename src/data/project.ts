@@ -55,6 +55,10 @@ const projects: Project[] = [
 					"Create transactions and filter them by pager number, table number, or payment method",
 			},
 			{
+				title: "Print Invoice",
+				description: "Connect with thermal printer and print the invoice",
+			},
+			{
 				title: "Coupon",
 				description:
 					"Create percentage or fixed-amount coupons for transactions",

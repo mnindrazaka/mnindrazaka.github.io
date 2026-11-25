@@ -5,7 +5,7 @@ import { Button } from "#/components/ui/button";
 export function HeroSection() {
 	return (
 		<div className="flex flex-col md:flex-row p-4 h-screen gap-12">
-			<div className="flex-1 p-4 bg-cover bg-center rounded-lg bg-[url(https://images.unsplash.com/photo-1759828040387-046690a60b05?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D)]"></div>
+			<div className="flex-1 p-4 bg-cover bg-center rounded-lg bg-[url(/hero.png)]"></div>
 			<div className="flex-1 flex flex-col justify-between items-center md:items-start gap-3 bg-background">
 				<div className="flex gap-8 mt-4"></div>
 				<div className="flex flex-col gap-3">
