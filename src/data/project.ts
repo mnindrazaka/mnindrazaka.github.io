@@ -1,7 +1,10 @@
-type Project = {
+export type Project = {
 	title: string;
 	slug: string;
 	year: number;
+	client: string;
+	codeUrl: string;
+	liveUrl: string;
 	description: string;
 	imageUrl: string;
 	problem: string;
@@ -9,12 +12,24 @@ type Project = {
 	outcome: string;
 	techStacks: string[];
 	platforms: string[];
+	features: { title: string; description: string }[];
+	usageStatistics: {
+		label: string;
+		value: string;
+	}[];
+	screenshots: {
+		url: string;
+		caption: string;
+	}[];
 };
 
 const projects: Project[] = [
 	{
 		title: "Point of Sale System",
 		slug: "pos",
+		client: "Gatherloop Board Game Cafe",
+		codeUrl: "https://github.com/gatherloop/gatherloop-monorepo",
+		liveUrl: "https://gatherloop-pos-preview.vercel.app",
 		year: 2024,
 		description:
 			"A point of sale system designed to help staff manage product, sales, and expenses in a coffee shop",
@@ -28,10 +43,74 @@ const projects: Project[] = [
 			"Improved system responsiveness and navigation, making transaction lookup and customer record management faster and more efficient.",
 		techStacks: ["React", "React Native", "Next.js", "Typescript", "Golang"],
 		platforms: ["Web", "Mobile"],
+		features: [
+			{
+				title: "Business Dashboard",
+				description:
+					"View key business numbers like total transactions, monthly expenses, and budgets",
+			},
+			{
+				title: "Transactions",
+				description:
+					"Create transactions and filter them by pager number, table number, or payment method",
+			},
+			{
+				title: "Coupon",
+				description:
+					"Create percentage or fixed-amount coupons for transactions",
+			},
+			{ title: "Categories", description: "Organize products into categories" },
+			{
+				title: "Products",
+				description:
+					"Manage menu items and their variants, such as iced, hot, or flavors",
+			},
+			{
+				title: "Materials",
+				description: "Manage the raw materials used in each product",
+			},
+			{
+				title: "COGS (Cost of Goods Sold)",
+				description:
+					"Calculate each product's cost from the raw materials it uses",
+			},
+			{
+				title: "Expenses",
+				description:
+					"Record expenses by type, such as operations or stock purchases",
+			},
+			{
+				title: "Cashier Reconciliation",
+				description:
+					"Compare the POS balance with the actual cash in the register",
+			},
+			{
+				title: "Budgets",
+				description: "Allocate expenses using percentage-based budgets",
+			},
+		],
+		usageStatistics: [
+			{ label: "Transactions", value: "20,000+" },
+			{ label: "Products", value: "200+" },
+			{ label: "Materials", value: "150+" },
+			{ label: "Expenses", value: "2500+" },
+		],
+		screenshots: [
+			{ url: "/pos/dashboard.png", caption: "Business dashboard" },
+			{ url: "/pos/transaction-create.png", caption: "Create new transaction" },
+			{ url: "/pos/transaction-list.png", caption: "Show transaction list" },
+			{
+				url: "/pos/variant-update.png",
+				caption: "Product materials and cost",
+			},
+		],
 	},
 	{
 		title: "Board Game Play Time Tracker",
 		slug: "bg-time-tracker",
+		client: "Gatherloop Board Game Cafe",
+		codeUrl: "https://github.com/gatherloop/gatherloop-monorepo",
+		liveUrl: "https://gatherloop-pos-preview.vercel.app",
 		year: 2025,
 		description:
 			"A RFID-based ticketing system that track board game play time and calculates customer charges based on play duration",
@@ -45,10 +124,48 @@ const projects: Project[] = [
 			"Streamlined the checkout process by eliminating manual time tracking and price calculations, allowing game masters to serve customers more efficiently.",
 		techStacks: ["React", "React Native", "Next.js", "Typescript", "Golang"],
 		platforms: ["Web", "Mobile"],
+		features: [
+			{
+				title: "Board Game Ticket Management",
+				description: "Manage RFID tickets and assign labels to them",
+			},
+			{
+				title: "Ticket Pricing Management",
+				description:
+					"Set flexible pricing, such as hourly, all-day pass, or hour packages",
+			},
+			{
+				title: "Check-in and Check-out",
+				description:
+					"Scan a ticket to start and end play. Play time and price are calculated automatically",
+			},
+		],
+		usageStatistics: [
+			{ label: "Total Play Time Hours", value: "65000+" },
+			{ label: "Board Game Transaction", value: "2500+" },
+		],
+		screenshots: [
+			{ url: "/boardgame/ticket-list.png", caption: "Manage ticket label" },
+			{
+				url: "/boardgame/ticket-pricing.png",
+				caption: "Set ticket pricing based on duration",
+			},
+			{
+				url: "/boardgame/rental-list.png",
+				caption: "Manage playing session",
+			},
+			{
+				url: "/boardgame/checkout.png",
+				caption: "Checkout ticket after playing",
+			},
+		],
 	},
 	{
 		title: "Inventory Management System",
 		slug: "inventory",
+		client: "Gatherloop Board Game Cafe",
+		codeUrl: "https://github.com/gatherloop/gatherloop-monorepo",
+		liveUrl: "https://gatherloop-pos-preview.vercel.app",
 		year: 2026,
 		description:
 			"A system to manage and track stock of raw material so coffee shop staff can know when and what to purchase",
@@ -62,10 +179,50 @@ const projects: Project[] = [
 			"Streamlined weekly inventory checks and reduced the time and manual effort required to prepare purchase lists.",
 		techStacks: ["React", "React Native", "Next.js", "Typescript", "Golang"],
 		platforms: ["Web", "Mobile"],
+		features: [
+			{
+				title: "Supplier Management",
+				description:
+					"Manage suppliers and their purchase channels, such as online store, offline store, or delivery",
+			},
+			{
+				title: "Stock Check Management",
+				description:
+					"Perform daily, weekly, or monthly stock checks to keep materials available",
+			},
+			{
+				title: "Purchase List",
+				description:
+					"Generate a purchase list automatically from stock check results",
+			},
+		],
+		usageStatistics: [
+			{ label: "Suppliers", value: "20" },
+			{ label: "Stock Check Performed", value: "50+" },
+			{ label: "Purchase List Created", value: "50+" },
+		],
+		screenshots: [
+			{
+				url: "/inventory/stock-check.png",
+				caption: "Perform raw material stock check",
+			},
+			{
+				url: "/inventory/purchase-list.png",
+				caption: "Generate purchase list based on stock check",
+			},
+			{ url: "/inventory/material-list.png", caption: "Manage raw materials" },
+			{
+				url: "/inventory/supplier-list.png",
+				caption: "Manage suppliers",
+			},
+		],
 	},
 	{
 		title: "Table Ordering System",
 		slug: "table-ordering",
+		client: "Gatherloop Board Game Cafe",
+		codeUrl: "https://github.com/gatherloop/gatherloop-monorepo",
+		liveUrl: "https://gatherloop-order-preview.vercel.app/t/W1A19QVFE3",
 		year: 2026,
 		description:
 			"A web based application that allow customer to order menu without leaving their table. Fully integrated with the POS system. Increase sales for the coffee shop",
@@ -79,6 +236,50 @@ const projects: Project[] = [
 			"Improved ordering convenience by reducing the effort required to place orders, creating a smoother customer experience and opportunities for additional sales.",
 		techStacks: ["React", "Next.js", "Typescript", "Golang"],
 		platforms: ["Web"],
+		features: [
+			{
+				title: "Tables Management",
+				description: "Register tables and their numbers",
+			},
+			{
+				title: "Tags",
+				description:
+					"Label products, such as 'Best Seller', 'New', or 'Barista's Choice', and filter by them",
+			},
+			{
+				title: "Availability",
+				description:
+					"Mark products or variants as sold out, or update their stock",
+			},
+			{
+				title: "Cash or QRIS Payment",
+				description: "Pay with cash or QRIS through the DOKU payment gateway",
+			},
+			{
+				title: "Push Notification for Barista",
+				description: "Alert baristas instantly when a table places an order",
+			},
+			{
+				title: "WhatsApp Notification",
+				description:
+					"Message customers on WhatsApp when their order is ready for pickup",
+			},
+		],
+		usageStatistics: [
+			{ label: "Transaction Ordered From Table", value: "892" },
+			{ label: "Unique Customer Ordered", value: "382" },
+			{ label: "Push Notification Sent to Barista", value: "1500+" },
+			{ label: "Whatsapp Notification Sent to Customer", value: "786" },
+		],
+		screenshots: [
+			{ url: "/table-order/menu.png", caption: "Show available menu" },
+			{ url: "/table-order/cart.png", caption: "Show cart" },
+			{ url: "/table-order/confirmation.png", caption: "Payment confirmation" },
+			{
+				url: "/table-order/payment.png",
+				caption: "Scan QR payment",
+			},
+		],
 	},
 ];
 

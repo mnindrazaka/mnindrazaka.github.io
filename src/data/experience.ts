@@ -1,4 +1,4 @@
-type Experience = {
+export type Experience = {
 	id: number;
 	start: number;
 	end?: number;

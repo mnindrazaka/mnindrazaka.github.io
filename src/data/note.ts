@@ -1,4 +1,4 @@
-type Note = {
+export type Note = {
 	guid: string;
 	author: string;
 	content: string;

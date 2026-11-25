@@ -10,23 +10,11 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AboutRouteImport } from './routes/about'
-import { Route as ApiResumeChatRouteImport } from './routes/api.resume-chat'
 import { Route as ProjectsSlugRouteImport } from './routes/projects/$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiResumeChatRoute = ApiResumeChatRouteImport.update({
-  id: '/api/resume-chat',
-  path: '/api/resume-chat',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProjectsSlugRoute = ProjectsSlugRouteImport.update({
@@ -37,35 +25,27 @@ const ProjectsSlugRoute = ProjectsSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/api/resume-chat': typeof ApiResumeChatRoute
   '/projects/$slug': typeof ProjectsSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/api/resume-chat': typeof ApiResumeChatRoute
   '/projects/$slug': typeof ProjectsSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/api/resume-chat': typeof ApiResumeChatRoute
   '/projects/$slug': typeof ProjectsSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/api/resume-chat' | '/projects/$slug'
+  fullPaths: '/' | '/projects/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/api/resume-chat' | '/projects/$slug'
-  id: '__root__' | '/' | '/about' | '/api/resume-chat' | '/projects/$slug'
+  to: '/' | '/projects/$slug'
+  id: '__root__' | '/' | '/projects/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AboutRoute: typeof AboutRoute
-  ApiResumeChatRoute: typeof ApiResumeChatRoute
   ProjectsSlugRoute: typeof ProjectsSlugRoute
 }
 
@@ -76,20 +56,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/resume-chat': {
-      id: '/api/resume-chat'
-      path: '/api/resume-chat'
-      fullPath: '/api/resume-chat'
-      preLoaderRoute: typeof ApiResumeChatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/projects/$slug': {
@@ -104,8 +70,6 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AboutRoute: AboutRoute,
-  ApiResumeChatRoute: ApiResumeChatRoute,
   ProjectsSlugRoute: ProjectsSlugRoute,
 }
 export const routeTree = rootRouteImport
