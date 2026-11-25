@@ -1,9 +1,7 @@
-import { InboxIcon } from "lucide-react";
 import {
 	Item,
 	ItemContent,
 	ItemDescription,
-	ItemMedia,
 	ItemTitle,
 } from "#/components/ui/item";
 import type { Project } from "#/data/project";

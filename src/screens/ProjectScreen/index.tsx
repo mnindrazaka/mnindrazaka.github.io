@@ -12,7 +12,7 @@ type ProjectScreenProps = {
 
 export function ProjectScreen({ project }: ProjectScreenProps) {
 	return (
-		<div className="flex flex-col justify-center pt-10 p-4">
+		<div className="flex flex-col justify-center pt-10 p-4 container mx-auto">
 			<OverviewSection
 				description={project.description}
 				imageUrl={project.imageUrl}
@@ -24,8 +24,12 @@ export function ProjectScreen({ project }: ProjectScreenProps) {
 				codeUrl={project.codeUrl}
 				liveUrl={project.liveUrl}
 			/>
-			<ScreenshotSection screenshots={project.screenshots} />
-			<div className="flex flex-col md:flex-row gap-8 mt-5">
+
+			<div className="my-20">
+				<ScreenshotSection screenshots={project.screenshots} />
+			</div>
+
+			<div className="flex flex-col md:flex-row gap-8">
 				<FeatureSection features={project.features} />
 				<UsageStatisticSection usageStatistics={project.usageStatistics} />
 				<div>

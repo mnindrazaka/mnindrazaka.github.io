@@ -45,8 +45,8 @@ export function HeroSection() {
 							viewport={{ once: true }}
 							className="flex justify-center"
 						>
-							<Button size="xl" className="w-full">
-								Contact me
+							<Button size="xl" className="w-full" asChild>
+								<a href="#contact">Contact me</a>
 							</Button>
 						</motion.div>
 						<motion.div
@@ -57,7 +57,7 @@ export function HeroSection() {
 							className="flex justify-center"
 						>
 							<Button variant="secondary" size="xl" className="w-full">
-								View my works
+								<a href="#project">View my works</a>
 							</Button>
 						</motion.div>
 					</div>

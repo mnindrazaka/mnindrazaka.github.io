@@ -93,7 +93,7 @@ const projects: Project[] = [
 			},
 		],
 		usageStatistics: [
-			{ label: "Transactions", value: "20,000+" },
+			{ label: "Transactions", value: "20000+" },
 			{ label: "Products", value: "200+" },
 			{ label: "Materials", value: "150+" },
 			{ label: "Expenses", value: "2500+" },

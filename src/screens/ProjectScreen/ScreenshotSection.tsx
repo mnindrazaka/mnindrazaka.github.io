@@ -6,7 +6,7 @@ export type ScreenshotSection = {
 
 export function ScreenshotSection({ screenshots }: ScreenshotSection) {
 	return (
-		<div className="flex mt-12 mb-5 gap-8">
+		<div className="flex gap-8">
 			<div className="flex-1">
 				<div className="max-w-lg flex flex-col gap-3">
 					<h1 className="font-bold text-2xl">SCREENSHOTS</h1>
@@ -21,7 +21,7 @@ export function ScreenshotSection({ screenshots }: ScreenshotSection) {
 								src={url}
 								alt={caption}
 							/>
-							<p className="text-md">{caption}</p>
+							<p className="text-lg">{caption}</p>
 						</div>
 					))}
 				</div>

@@ -6,7 +6,7 @@ import { Card, CardContent } from "#/components/ui/card";
 
 export function ContactSection() {
 	return (
-		<div className="flex justify-center mt-20 m-auto container">
+		<div className="flex justify-center mt-20 m-auto container" id="contact">
 			<Card className="w-full">
 				<CardContent>
 					<div className="flex p-4 gap-8 items-center">

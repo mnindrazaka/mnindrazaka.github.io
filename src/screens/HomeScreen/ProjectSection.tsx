@@ -10,7 +10,7 @@ export type ProjectSectionProps = {
 
 export function ProjectSection({ projects }: ProjectSectionProps) {
 	return (
-		<div className="flex justify-center mt-10">
+		<div className="flex justify-center mt-10" id="project">
 			<div className="container">
 				<div className="flex flex-col gap-20 p-4">
 					<div className="flex flex-col justify-center items-center gap-3">
