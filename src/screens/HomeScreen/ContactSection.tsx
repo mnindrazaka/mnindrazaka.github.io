@@ -6,7 +6,10 @@ import { Card, CardContent } from "#/components/ui/card";
 
 export function ContactSection() {
 	return (
-		<div className="flex justify-center mt-20 m-auto container" id="contact">
+		<div
+			className="flex justify-center mt-20 mb-20 m-auto container"
+			id="contact"
+		>
 			<Card className="w-full">
 				<CardContent>
 					<div className="flex p-4 gap-8 items-center">
@@ -20,20 +23,25 @@ export function ContactSection() {
 							>
 								Contact
 							</motion.p>
-							<h1 className="text-5xl font-bold">Let's Talk</h1>
-							<p className="text-2xl max-w-sm">
-								Got a good opportunity ? Have something to build ? Lets talk
-								about it
+							<h1 className="text-5xl font-bold">Open to New Opportunities</h1>
+							<p className="text-2xl max-w-3xl">
+								I'm always interested in connecting with people building great
+								products. If you have an opportunity or think we'd be a good
+								fit, let's talk!
 							</p>
-							<div className="flex flex-col sm:flex-row gap-5">
-								<Button>
-									<Mail />
-									mnindrazaka@gmail.com
+							<div className="flex flex-col sm:flex-row gap-5 mt-5">
+								<Button asChild>
+									<a href="mailto:mnindrazaka@gmail.com">
+										<Mail />
+										mnindrazaka@gmail.com
+									</a>
 								</Button>
 
-								<Button>
-									<LinkedinIcon />
-									mnindrazaka
+								<Button asChild>
+									<a href="https://www.linkedin.com/in/mnindrazaka/">
+										<LinkedinIcon />
+										mnindrazaka
+									</a>
 								</Button>
 							</div>
 						</div>
