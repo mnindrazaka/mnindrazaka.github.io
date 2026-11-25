@@ -74,11 +74,11 @@ export function ExperienceSection({ experiences }: ExperienceSectionProps) {
 										initial={{ opacity: 0, y: 20 }}
 										whileInView={{ opacity: 1, y: 0 }}
 										transition={{ duration: 0.4, ease: "easeOut" }}
-										href="https://google.com"
+										href={experience.company.url}
 										className="text-yellow-500 text-xl"
 										viewport={{ once: true }}
 									>
-										{experience.company}
+										{experience.company.name}
 									</motion.a>
 									<motion.p
 										initial={{ opacity: 0, y: 20 }}

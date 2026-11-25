@@ -3,7 +3,10 @@ export type Experience = {
 	start: number;
 	end?: number;
 	role: string;
-	company: string;
+	company: {
+		name: string;
+		url: string;
+	};
 	description: string;
 };
 
@@ -13,7 +16,7 @@ const experiences: Experience[] = [
 		start: 2025,
 		end: 2026,
 		role: "Fullstack Engineer",
-		company: "ADPList",
+		company: { name: "ADPList", url: "https://adplist.org/" },
 		description:
 			"Developed ADPList mentoring platform across frontend and backend. Migrated backend services from Django on EC2 to Node.js serverless functions.",
 	},
@@ -22,7 +25,10 @@ const experiences: Experience[] = [
 		start: 2023,
 		end: 2024,
 		role: "Lead Frontend Engineer",
-		company: "KarirLab",
+		company: {
+			name: "KarirLab",
+			url: "https://www.linkedin.com/company/karirlab/about/",
+		},
 		description:
 			"Led a frontend team building recruitment products, including resume builder, job application tracking, candidate filtering, and payment subscriptions. Contributed to technical planning, architecture decisions, and cross-team delivery",
 	},
@@ -31,7 +37,7 @@ const experiences: Experience[] = [
 		start: 2021,
 		end: 2023,
 		role: "Frontend Engineer",
-		company: "Ruangguru",
+		company: { name: "Ruangguru", url: "https://www.ruangguru.com/" },
 		description:
 			"Developed Skill Academy, an online course platform, optimizing web performance and SEO. Built a cross-platform design system enabling code sharing between web and mobile applications",
 	},
@@ -39,7 +45,7 @@ const experiences: Experience[] = [
 		id: 4,
 		start: 2020,
 		role: "Frontend Engineer",
-		company: "Feedloop",
+		company: { name: "Feedloop", url: "https://feedloop.ai/" },
 		description:
 			"Built Kanvas, a no-code platform for creating microsites. Developed a drag-and-drop visual editor using HTML Canvas, enabling users to create campaigns without engineering assistance",
 	},
