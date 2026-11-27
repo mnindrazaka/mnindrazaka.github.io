@@ -11,7 +11,7 @@ export const Route = createFileRoute("/")({
 			{
 				rel: "preload",
 				as: "image",
-				href: "/hero.webp",
+				href: "/hero.avif",
 				fetchPriority: "high",
 			},
 		],

@@ -7,7 +7,7 @@ export function AboutSection() {
 				<div className="flex-1 border border-gray-800 rounded-lg">
 					<motion.img
 						className="w-full rounded-lg"
-						src="/profile.webp"
+						src="/profile.avif"
 						alt=""
 						initial={{ scale: 0.9, y: 12 }}
 						whileInView={{ scale: 1, y: 0 }}
