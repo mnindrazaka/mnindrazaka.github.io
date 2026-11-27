@@ -15,7 +15,7 @@ export function TechStackSection({ techStacks }: TechStackSection) {
 			<div className="flex flex-wrap gap-3">
 				{techStacks.map((techStack) => (
 					<p
-						className="bg-white text-black rounded-sm px-5 py-2"
+						className="bg-neutral-900 text-white rounded-sm px-5 py-2"
 						key={techStack}
 					>
 						{techStack}

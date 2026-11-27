@@ -10,9 +10,9 @@ export type ProjectSectionProps = {
 
 export function ProjectSection({ projects }: ProjectSectionProps) {
 	return (
-		<div className="flex justify-center mt-10" id="project">
+		<div className="flex justify-center mt-10 p-8" id="project">
 			<div className="container">
-				<div className="flex flex-col gap-20 p-4">
+				<div className="flex flex-col gap-20">
 					<div className="flex flex-col justify-center items-center gap-3">
 						<motion.p
 							initial={{ opacity: 0, y: 20 }}
@@ -25,7 +25,7 @@ export function ProjectSection({ projects }: ProjectSectionProps) {
 						</motion.p>
 
 						<motion.h1
-							className="text-5xl font-bold text-center"
+							className="text-7xl font-bold text-center"
 							initial={{ opacity: 0, y: 20 }}
 							whileInView={{ opacity: 1, y: 0 }}
 							transition={{ duration: 0.4, ease: "easeOut" }}

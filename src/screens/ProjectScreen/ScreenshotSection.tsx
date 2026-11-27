@@ -6,16 +6,19 @@ export type ScreenshotSection = {
 
 export function ScreenshotSection({ screenshots }: ScreenshotSection) {
 	return (
-		<div className="flex gap-8">
-			<div className="flex-1">
+		<div className="flex gap-8 p-8  bg-neutral-900">
+			<div className="flex-1 container mx-auto">
 				<div className="max-w-lg flex flex-col gap-3">
-					<h1 className="font-bold text-2xl">SCREENSHOTS</h1>
+					<h1 className="font-bold text-3xl">Screenshots</h1>
 					<div className="border mb-5"></div>
 				</div>
 
 				<div className="flex flex-wrap gap-5">
 					{screenshots.map(({ url, caption }) => (
-						<div key={caption} className="flex flex-col gap-2">
+						<div
+							key={caption}
+							className="flex flex-col gap-2 bg-neutral-800 p-4 rounded-lg"
+						>
 							<img
 								className="rounded-lg w-full max-w-full lg:max-w-xs"
 								src={url}

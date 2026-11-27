@@ -20,21 +20,21 @@ const services = [
 		icon: <AppWindow />,
 	},
 	{
-		title: "Built AI Feature",
-		description: "Bringing intelligent capabilities into digital products",
-		icon: <CpuAi />,
-	},
-	{
 		title: "Web Performance Optimization",
 		description: "Making web applications faster and efficient",
 		icon: <Rocket />,
+	},
+	{
+		title: "Built AI Feature",
+		description: "Bringing intelligent capabilities into digital products",
+		icon: <CpuAi />,
 	},
 ];
 
 export function ServiceSection() {
 	return (
-		<div className="flex justify-center mt-20">
-			<div className="flex flex-col p-4 gap-12 container">
+		<div className="flex justify-center mt-20 bg-neutral-900 py-10">
+			<div className="flex flex-col p-8 gap-12 container">
 				<div className="flex flex-1 flex-col justify-center gap-3">
 					<motion.p
 						initial={{ opacity: 0, y: 20 }}
@@ -70,7 +70,7 @@ export function ServiceSection() {
 					{services.map(({ title, description, icon }) => (
 						<Item
 							variant="outline"
-							className="p-8 flex-1 h-full flex flex-col items-start"
+							className="p-8 flex-1 h-full flex flex-col items-start border-neutral-800 bg-neutral-800"
 							key={title}
 						>
 							<ItemContent>

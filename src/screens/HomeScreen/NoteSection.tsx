@@ -76,7 +76,7 @@ export function NoteSection({ notes }: NoteSectionProps) {
 
 					<motion.div
 						key="loaded"
-						className="flex gap-10 flex-wrap"
+						className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10"
 						variants={staggerContainer}
 						initial="hidden"
 						whileInView="visible"
@@ -90,18 +90,18 @@ export function NoteSection({ notes }: NoteSectionProps) {
 								whileHover={{ y: -3 }}
 								whileTap={{ scale: 0.99 }}
 								transition={{ duration: 0.2 }}
-								className="basis-[100%] sm:basis-[45%] md:basis-[29%] flex flex-col justify-between"
+								className="flex flex-col justify-between"
 								viewport={{ once: true }}
 							>
 								<div className="flex flex-col gap-2">
 									<img
 										src={note.enclosure.link}
 										alt=""
-										className="rounded-lg mb-5 w-full aspect-video object-cover max-w-full sm:max-w-xs"
+										className="rounded-lg mb-5 w-full aspect-video object-cover"
 									/>
 									<h1 className="text-2xl font-bold">{note.title}</h1>
-									<p className="text-gray-400 text-lg">{note.description}</p>
-									<p className="text-md mt-3">
+									<p className="text-gray-300 text-lg">{note.description}</p>
+									<p className="text-md mt-3 text-gray-400">
 										{dateFormatter
 											.format(new Date(note.pubDate))
 											.replace(",", "")}

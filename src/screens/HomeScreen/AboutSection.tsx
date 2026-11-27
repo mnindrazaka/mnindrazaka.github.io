@@ -2,9 +2,9 @@ import { motion } from "motion/react";
 
 export function AboutSection() {
 	return (
-		<div className="flex justify-center mt-20">
-			<div className="flex flex-col sm:flex-row p-4 gap-12 container">
-				<div className="flex-1 bg-gray-950 border border-gray-800 rounded-lg">
+		<div className="flex justify-center bg-neutral-900 p-8 mt-20">
+			<div className="flex flex-col sm:flex-row gap-12 container">
+				<div className="flex-1 border border-gray-800 rounded-lg">
 					<motion.img
 						className="w-full rounded-lg"
 						src="/profile.webp"
@@ -15,7 +15,7 @@ export function AboutSection() {
 						viewport={{ once: true }}
 					/>
 				</div>
-				<div className="flex-2 flex flex-col justify-center items-start gap-3 bg-background">
+				<div className="flex-2 flex flex-col justify-center items-start gap-3">
 					<motion.p
 						initial={{ opacity: 0, y: 20 }}
 						whileInView={{ opacity: 1, y: 0 }}

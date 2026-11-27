@@ -2,11 +2,6 @@ import { Link } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { motion } from "motion/react";
 import { Button } from "#/components/ui/button";
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
-} from "#/components/ui/tooltip";
 
 export type OverviewSectionProps = {
 	imageUrl: string;
@@ -32,13 +27,13 @@ export function OverviewSection({
 	liveUrl,
 }: OverviewSectionProps) {
 	return (
-		<div className="flex flex-col md:flex-row min-h-screen gap-12">
+		<div className="flex flex-col md:flex-row min-h-screen">
 			<div
 				className={`flex-1 p-4 bg-cover bg-center rounded-lg min-h-50`}
 				style={{ backgroundImage: `url('${imageUrl}')` }}
 			></div>
 
-			<div className="flex-1 flex flex-col gap-8 bg-background">
+			<div className="flex-1 flex flex-col gap-8 p-8">
 				<Link to="/" className="flex gap-2 items-center" href="/">
 					<ArrowLeft size="20px" />
 					<p>Back to Home</p>
@@ -93,23 +88,23 @@ export function OverviewSection({
 					</motion.div>
 				</div>
 
-				<div className="max-w-lg flex flex-col gap-3">
-					<h1 className="font-bold text-3xl">PROBLEM</h1>
+				<div className="max-w-lg flex flex-col gap-3 bg-neutral-900 p-8 rounded-lg">
+					<h1 className="font-bold text-3xl">Problem</h1>
 					<div className="border"></div>
-					<p className="text-xl">{problem}</p>
+					<p className="text-xl text-neutral-400">{problem}</p>
 				</div>
 
-				<div className="max-w-lg flex flex-col gap-3">
-					<h1 className="font-bold text-3xl">SOLUTION</h1>
+				<div className="max-w-lg flex flex-col gap-3 bg-neutral-900 p-8 rounded-lg">
+					<h1 className="font-bold text-3xl">Solution</h1>
 					<div className="border"></div>
 
-					<p className="text-xl">{solution}</p>
+					<p className="text-xl text-neutral-400">{solution}</p>
 				</div>
 
-				<div className="max-w-lg flex flex-col gap-3">
-					<h1 className="font-bold text-3xl">OUTCOME</h1>
+				<div className="max-w-lg flex flex-col gap-3 bg-neutral-900 p-8 rounded-lg">
+					<h1 className="font-bold text-3xl">Outcome</h1>
 					<div className="border"></div>
-					<p className="text-xl">{outcome}</p>
+					<p className="text-xl text-neutral-400">{outcome}</p>
 				</div>
 			</div>
 		</div>

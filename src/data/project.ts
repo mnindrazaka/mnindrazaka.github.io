@@ -33,7 +33,7 @@ const projects: Project[] = [
 		year: 2024,
 		description:
 			"A point of sale system designed to help staff manage product, sales, and expenses in a coffee shop",
-		imageUrl: "/pos/hero.png",
+		imageUrl: "/pos/hero.webp",
 		problem:
 			"Founded in 2023, Gatherloop Coffee Shop initially used Coda to manage customer transactions. As transaction records grew, the system became increasingly slow because it fetched all records at once and relied on client-side pagination",
 		solution:
@@ -99,11 +99,14 @@ const projects: Project[] = [
 			{ label: "Expenses", value: "2500+" },
 		],
 		screenshots: [
-			{ url: "/pos/dashboard.png", caption: "Business dashboard" },
-			{ url: "/pos/transaction-create.png", caption: "Create new transaction" },
-			{ url: "/pos/transaction-list.png", caption: "Show transaction list" },
+			{ url: "/pos/dashboard.webp", caption: "Business dashboard" },
 			{
-				url: "/pos/variant-update.png",
+				url: "/pos/transaction-create.webp",
+				caption: "Create new transaction",
+			},
+			{ url: "/pos/transaction-list.webp", caption: "Show transaction list" },
+			{
+				url: "/pos/variant-update.webp",
 				caption: "Product materials and cost",
 			},
 		],
@@ -148,17 +151,17 @@ const projects: Project[] = [
 			{ label: "Board Game Transaction", value: "2500+" },
 		],
 		screenshots: [
-			{ url: "/boardgame/ticket-list.png", caption: "Manage ticket label" },
+			{ url: "/boardgame/ticket-list.webp", caption: "Manage ticket label" },
 			{
-				url: "/boardgame/ticket-pricing.png",
+				url: "/boardgame/ticket-pricing.webp",
 				caption: "Set ticket pricing based on duration",
 			},
 			{
-				url: "/boardgame/rental-list.png",
+				url: "/boardgame/rental-list.webp",
 				caption: "Manage playing session",
 			},
 			{
-				url: "/boardgame/checkout.png",
+				url: "/boardgame/checkout.webp",
 				caption: "Checkout ticket after playing",
 			},
 		],
@@ -172,7 +175,7 @@ const projects: Project[] = [
 		year: 2026,
 		description:
 			"A system to manage and track stock of raw material so coffee shop staff can know when and what to purchase",
-		imageUrl: "/inventory/hero.png",
+		imageUrl: "/inventory/hero.webp",
 		problem:
 			"Weekly inventory checks required staff to manually inspect stock levels and determine how much of each raw material to purchase. Reviewing items one by one made the process time-consuming and inefficient.",
 		solution:
@@ -205,16 +208,16 @@ const projects: Project[] = [
 		],
 		screenshots: [
 			{
-				url: "/inventory/stock-check.png",
+				url: "/inventory/stock-check.webp",
 				caption: "Perform raw material stock check",
 			},
 			{
-				url: "/inventory/purchase-list.png",
+				url: "/inventory/purchase-list.webp",
 				caption: "Generate purchase list based on stock check",
 			},
-			{ url: "/inventory/material-list.png", caption: "Manage raw materials" },
+			{ url: "/inventory/material-list.webp", caption: "Manage raw materials" },
 			{
-				url: "/inventory/supplier-list.png",
+				url: "/inventory/supplier-list.webp",
 				caption: "Manage suppliers",
 			},
 		],
@@ -274,11 +277,14 @@ const projects: Project[] = [
 			{ label: "Whatsapp Notification Sent to Customer", value: "786" },
 		],
 		screenshots: [
-			{ url: "/table-order/menu.png", caption: "Show available menu" },
-			{ url: "/table-order/cart.png", caption: "Show cart" },
-			{ url: "/table-order/confirmation.png", caption: "Payment confirmation" },
+			{ url: "/table-order/menu.webp", caption: "Show available menu" },
+			{ url: "/table-order/cart.webp", caption: "Show cart" },
 			{
-				url: "/table-order/payment.png",
+				url: "/table-order/confirmation.webp",
+				caption: "Payment confirmation",
+			},
+			{
+				url: "/table-order/payment.webp",
 				caption: "Scan QR payment",
 			},
 		],
